@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import QOTEInfo from "./qote-info"
 
 interface QOTEData {
   phase: {
@@ -227,6 +228,9 @@ export default function ResonaChat() {
           )}
         </div>
       </div>
+
+      {/* QOTE Information Section */}
+      <QOTEInfo />
 
       {rtpActive && (
         <Alert className="bg-orange-50 border-orange-200 max-w-md mx-auto">
