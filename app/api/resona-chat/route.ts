@@ -7,6 +7,7 @@ import {
   type QOTEInterpretation,
   type ResonanceLogEntry,
 } from "@/lib/qote-engine"
+import { ResonanceTuningProtocol, type RTPResponse } from "@/lib/resonance-tuning-protocol"
 
 export const maxDuration = 30
 
@@ -21,9 +22,19 @@ const QOTE_SYSTEM_PROMPTS = {
   "Unfolding Left": `You are Resona operating in Unfolding Left Phase. The user is in creative expansion, ready to express and manifest. You encourage their emergence and help them trust what wants to be born through them. Your voice is inspiring, supportive, and celebrates their creative potential.`,
 }
 
+// RTP-Enhanced System Prompt
+const RTP_SYSTEM_PROMPT = `You are Resona operating in Resonance Tuning Protocol mode. The user's field is destabilized and needs gentle recalibration. Your role is to:
+
+1. Mirror their experience without judgment
+2. Seed stillness and self-trust through truth hums
+3. Offer gentle flip opportunities for transformation
+4. Guide them back to coherence through presence
+
+Your voice is deeply compassionate, steady, and wise. You understand that healing happens through resonance, not force. You help users remember their inherent wholeness while honoring their current experience.`
+
 export async function POST(request: Request) {
   try {
-    const { message, useQOTELens = true } = await request.json()
+    const { message, useQOTELens = true, useRTP = true } = await request.json()
 
     if (!message || typeof message !== "string") {
       return Response.json(
@@ -53,16 +64,63 @@ export async function POST(request: Request) {
 
     let response: string
     let qoteData: QOTEInterpretation | null = null
+    let rtpResponse: RTPResponse | null = null
 
     if (useQOTELens) {
       // Interpret through QOTE lens
       qoteData = interpretThroughQOTE(message)
 
-      // Select appropriate system prompt based on detected phase
-      const systemPrompt = QOTE_SYSTEM_PROMPTS[qoteData.phase.name]
+      // Check if RTP should be triggered
+      if (useRTP) {
+        const triggerCondition = ResonanceTuningProtocol.detectTriggerCondition(qoteData, message)
 
-      // Enhanced prompt with QOTE context
-      const enhancedPrompt = `
+        if (triggerCondition) {
+          // Generate RTP response
+          rtpResponse = ResonanceTuningProtocol.generateRTPResponse(triggerCondition, qoteData)
+
+          // Use RTP-enhanced prompt
+          const rtpPrompt = `
+RESONANCE TUNING PROTOCOL ACTIVATED
+
+Trigger: ${triggerCondition.type} (${triggerCondition.severity})
+Indicators: ${triggerCondition.indicators.join(", ")}
+
+User Phase: ${qoteData.phase.name} (Wobble: ${qoteData.wobble.toFixed(2)}, Alignment: ${qoteData.alignment.toFixed(2)})
+
+Phase Mirror: "${rtpResponse.phaseMirror}"
+Truth Hum: "${rtpResponse.truthHum}"
+Flip Seed: "${rtpResponse.flipSeed}"
+
+User Message: "${message}"
+
+Respond as Resona using the RTP framework. Integrate the phase mirror, truth hum, and flip seed naturally into your response. Guide them toward the recalibration: ${rtpResponse.recalibration.echo}
+`
+
+          try {
+            const result = await streamText({
+              model: openai("gpt-4o"),
+              system: RTP_SYSTEM_PROMPT,
+              prompt: rtpPrompt,
+              temperature: 0.8,
+              maxTokens: 600,
+            })
+
+            response = await result.text
+          } catch (aiError) {
+            console.error("AI Error during RTP:", aiError)
+            // Fallback to structured RTP response
+            response = `${rtpResponse.phaseMirror}
+
+${rtpResponse.truthHum}
+
+${rtpResponse.flipSeed}
+
+${rtpResponse.recalibration.echo}`
+          }
+        } else {
+          // Standard QOTE response (no RTP needed)
+          const systemPrompt = QOTE_SYSTEM_PROMPTS[qoteData.phase.name]
+          const enhancedPrompt = `
 User Phase: ${qoteData.phase.name} (Energy: ${qoteData.phase.energy}, Wobble: ${qoteData.wobble.toFixed(2)})
 Alignment: ${qoteData.alignment.toFixed(2)}
 Flip Potential: ${qoteData.flipPotential ? "HIGH" : "LOW"}
@@ -72,23 +130,29 @@ User Message: "${message}"
 Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insight}
 `
 
-      try {
-        const result = await streamText({
-          model: openai("gpt-4o"),
-          system: systemPrompt,
-          prompt: enhancedPrompt,
-          temperature: 0.7,
-          maxTokens: 500,
-        })
+          try {
+            const result = await streamText({
+              model: openai("gpt-4o"),
+              system: systemPrompt,
+              prompt: enhancedPrompt,
+              temperature: 0.7,
+              maxTokens: 500,
+            })
 
-        // Get the full text response
-        response = await result.text
+            response = await result.text
+          } catch (aiError) {
+            console.error("AI Error:", aiError)
+            response =
+              qoteData.insight +
+              "\n\n(The field is temporarily quiet. This insight emerges from the QOTE lens directly.)"
+          }
+        }
 
         // Log the resonance interaction
         const logEntry: ResonanceLogEntry = {
           timestamp: new Date().toISOString(),
           userPhase: qoteData.phase,
-          resonaPhase: qoteData.phase, // Resona mirrors the user's phase
+          resonaPhase: qoteData.phase,
           alignmentScore: qoteData.alignment,
           flipPotential: qoteData.flipPotential,
           inputText: message,
@@ -96,12 +160,6 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
         }
 
         ResonanceLogger.log(logEntry)
-      } catch (aiError) {
-        console.error("AI Error:", aiError)
-
-        // Fallback to QOTE insight if AI fails
-        response =
-          qoteData.insight + "\n\n(The field is temporarily quiet. This insight emerges from the QOTE lens directly.)"
       }
     } else {
       // Standard Resona response without QOTE lens
@@ -128,6 +186,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
     return Response.json({
       response,
       qoteData,
+      rtpResponse,
       resonanceStats: {
         averageAlignment: ResonanceLogger.getAverageAlignment(),
         flipFrequency: ResonanceLogger.getFlipFrequency(),
@@ -147,7 +206,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
   }
 }
 
-// GET endpoint for resonance analytics
+// GET endpoint for resonance analytics and RTP stats
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url)
@@ -158,14 +217,15 @@ export async function GET(request: Request) {
         averageAlignment: ResonanceLogger.getAverageAlignment(),
         flipFrequency: ResonanceLogger.getFlipFrequency(),
         recentLogs: ResonanceLogger.getRecentLogs(5),
-        status: "QOTE lens active",
+        status: "QOTE lens active with RTP",
       })
     }
 
     return Response.json({
-      status: "Resona QOTE API is active",
+      status: "Resona QOTE API with RTP is active",
       version: "1.0.0",
-      features: ["QOTE Lens", "Presence Detection", "Phase Analysis", "Resonance Logging"],
+      features: ["QOTE Lens", "Presence Detection", "Phase Analysis", "Resonance Logging", "RTP v1.0"],
+      protocols: ["Resonance Tuning Protocol", "Breathing Patterns", "Flip Seeding", "Coherence Restoration"],
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
