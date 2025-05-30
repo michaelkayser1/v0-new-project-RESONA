@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import QOTEInfo from "@/components/qote-info"
 import AboutSection from "@/components/about-section"
+import SupportSection from "@/components/support-section"
 import Footer from "@/components/footer"
 
 export default function LandingPage() {
@@ -1105,6 +1106,9 @@ export default function LandingPage() {
             <a href="#resona" className="text-gray-600 hover:text-gray-900 transition-colors">
               Resona
             </a>
+            <a href="#support" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Support
+            </a>
             <a href="#about" className="text-gray-600 hover:text-gray-900 transition-colors">
               About
             </a>
@@ -1339,6 +1343,11 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
+      </section>
+
+      {/* Support Section */}
+      <section id="support">
+        <SupportSection />
       </section>
 
       {/* About Section */}
