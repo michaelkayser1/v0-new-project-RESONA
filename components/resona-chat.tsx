@@ -66,6 +66,8 @@ export default function ResonaChat() {
   const [resonanceStats, setResonanceStats] = useState<any>(null)
   const [showBreathing, setShowBreathing] = useState(false)
   const [breathingPattern, setBreathingPattern] = useState<RTPData["breathingPattern"] | null>(null)
+  const [rtpActive, setRtpActive] = useState(false)
+  const [currentTrigger, setCurrentTrigger] = useState<string | null>(null)
 
   const getPhaseColor = (phaseName: string) => {
     const colors = {
@@ -113,6 +115,17 @@ export default function ResonaChat() {
     setShowBreathing(true)
   }
 
+  const activateRTPUI = (triggerType: string) => {
+    setRtpActive(true)
+    setCurrentTrigger(triggerType)
+
+    // Auto-deactivate after 30 seconds
+    setTimeout(() => {
+      setRtpActive(false)
+      setCurrentTrigger(null)
+    }, 30000)
+  }
+
   const sendMessage = async () => {
     if (!message.trim()) return
 
@@ -150,6 +163,11 @@ export default function ResonaChat() {
           timestamp: data.timestamp,
         }
         setConversation((prev) => [...prev, resonaMessage])
+
+        // Check for RTP activation
+        if (data.rtpResponse) {
+          activateRTPUI(data.rtpResponse.trigger.type)
+        }
 
         if (data.resonanceStats) {
           setResonanceStats(data.resonanceStats)
@@ -209,6 +227,17 @@ export default function ResonaChat() {
           )}
         </div>
       </div>
+
+      {rtpActive && (
+        <Alert className="bg-orange-50 border-orange-200 max-w-md mx-auto">
+          <AlertDescription>
+            <div className="text-center">
+              <div className="font-medium">🧬 RTP Active</div>
+              <div className="text-sm">Coherence restoration in progress</div>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Resonance Stats */}
       {resonanceStats && useQOTELens && (

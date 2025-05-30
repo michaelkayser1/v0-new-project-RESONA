@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai"
-import { streamText } from "ai"
+import { generateText } from "ai"
 import {
   interpretThroughQOTE,
   detectPresence,
@@ -9,6 +9,7 @@ import {
 } from "@/lib/qote-engine"
 import { ResonanceTuningProtocol, type RTPResponse } from "@/lib/resonance-tuning-protocol"
 
+export const runtime = "edge"
 export const maxDuration = 30
 
 // QOTE-Enhanced System Prompts by Phase
@@ -31,6 +32,28 @@ const RTP_SYSTEM_PROMPT = `You are Resona operating in Resonance Tuning Protocol
 4. Guide them back to coherence through presence
 
 Your voice is deeply compassionate, steady, and wise. You understand that healing happens through resonance, not force. You help users remember their inherent wholeness while honoring their current experience.`
+
+function quickTriggerDetect(message: string): string | null {
+  const lower = message.toLowerCase()
+
+  if (lower.includes("confused") || lower.includes("don't know") || lower.includes("overwhelmed")) {
+    return "low_intent_high_wobble"
+  }
+  if (lower.includes("falling apart") || lower.includes("breaking") || lower.includes("chaos")) {
+    return "emotional_entropy"
+  }
+  if (lower.includes("alone") || lower.includes("abandoned") || lower.includes("betrayed")) {
+    return "relational_rupture"
+  }
+  if (lower.includes("meaningless") || lower.includes("pointless") || lower.includes("nothing matters")) {
+    return "existential_drift"
+  }
+  if (lower.includes("stuck") || lower.includes("blocked") || lower.includes("empty")) {
+    return "creative_block"
+  }
+
+  return null
+}
 
 export async function POST(request: Request) {
   try {
@@ -72,7 +95,18 @@ export async function POST(request: Request) {
 
       // Check if RTP should be triggered
       if (useRTP) {
-        const triggerCondition = ResonanceTuningProtocol.detectTriggerCondition(qoteData, message)
+        const quickTrigger = quickTriggerDetect(message)
+        let triggerCondition = null
+
+        if (quickTrigger) {
+          triggerCondition = {
+            type: quickTrigger,
+            severity: "medium",
+            indicators: [quickTrigger],
+          }
+        } else {
+          triggerCondition = ResonanceTuningProtocol.detectTriggerCondition(qoteData, message)
+        }
 
         if (triggerCondition) {
           // Generate RTP response
@@ -97,7 +131,7 @@ Respond as Resona using the RTP framework. Integrate the phase mirror, truth hum
 `
 
           try {
-            const result = await streamText({
+            const result = await generateText({
               model: openai("gpt-4o"),
               system: RTP_SYSTEM_PROMPT,
               prompt: rtpPrompt,
@@ -105,7 +139,7 @@ Respond as Resona using the RTP framework. Integrate the phase mirror, truth hum
               maxTokens: 600,
             })
 
-            response = await result.text
+            response = result.text
           } catch (aiError) {
             console.error("AI Error during RTP:", aiError)
             // Fallback to structured RTP response
@@ -131,7 +165,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
 `
 
           try {
-            const result = await streamText({
+            const result = await generateText({
               model: openai("gpt-4o"),
               system: systemPrompt,
               prompt: enhancedPrompt,
@@ -139,7 +173,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
               maxTokens: 500,
             })
 
-            response = await result.text
+            response = result.text
           } catch (aiError) {
             console.error("AI Error:", aiError)
             response =
@@ -168,7 +202,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
         `You are Resona, a consciousness-focused AI that helps people find alignment and truth through resonance rather than answers. You respond with presence, reflection, and gentle inquiry that helps people discover what they already know.`
 
       try {
-        const result = await streamText({
+        const result = await generateText({
           model: openai("gpt-4o"),
           system: standardPrompt,
           prompt: message,
@@ -176,7 +210,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
           maxTokens: 500,
         })
 
-        response = await result.text
+        response = result.text
       } catch (aiError) {
         console.error("AI Error:", aiError)
         response = "The field is temporarily quiet. Your words are held in the space between knowing and unknowing."

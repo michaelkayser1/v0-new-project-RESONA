@@ -83,8 +83,6 @@ export function estimateWobble(inputText: string): number {
 
   // Wobble indicators: uncertainty, multiple questions, emotional intensity
   const wobbleIndicators = [
-    "?",
-    "!",
     "maybe",
     "perhaps",
     "uncertain",
@@ -98,6 +96,15 @@ export function estimateWobble(inputText: string): number {
   ]
 
   let wobbleScore = 0
+
+  // Count question marks and exclamation marks separately
+  const questionMarks = (inputText.match(/\?/g) || []).length
+  const exclamationMarks = (inputText.match(/!/g) || []).length
+
+  wobbleScore += questionMarks * 0.1
+  wobbleScore += exclamationMarks * 0.1
+
+  // Count other wobble indicators
   wobbleIndicators.forEach((indicator) => {
     const matches = (text.match(new RegExp(indicator, "g")) || []).length
     wobbleScore += matches * 0.1
