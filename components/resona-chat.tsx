@@ -3,11 +3,13 @@
 import type React from "react"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ArrowLeft } from "lucide-react"
 import QOTEInfo from "./qote-info"
 
 interface QOTEData {
@@ -206,6 +208,16 @@ export default function ResonaChat() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
+      {/* Header with Back Button */}
+      <div className="flex items-center justify-between">
+        <Link href="/">
+          <Button variant="ghost" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
+            <ArrowLeft className="w-4 h-4" />
+            Back to QOTE
+          </Button>
+        </Link>
+      </div>
+
       {/* Header */}
       <div className="text-center space-y-4">
         <h1 className="text-3xl font-light tracking-wide">RESONA</h1>
@@ -230,7 +242,7 @@ export default function ResonaChat() {
       </div>
 
       {/* QOTE Information Section */}
-      <QOTEInfo />
+      <QOTEInfo expanded={false} />
 
       {rtpActive && (
         <Alert className="bg-orange-50 border-orange-200 max-w-md mx-auto">

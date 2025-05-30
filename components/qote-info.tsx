@@ -6,8 +6,12 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp, Zap, Circle, Waves, Sparkles } from "lucide-react"
 
-export default function QOTEInfo() {
-  const [isExpanded, setIsExpanded] = useState(false)
+interface QOTEInfoProps {
+  expanded?: boolean
+}
+
+export default function QOTEInfo({ expanded = false }: QOTEInfoProps) {
+  const [isExpanded, setIsExpanded] = useState(expanded)
   const [activeSection, setActiveSection] = useState<string | null>(null)
 
   const principles = [
@@ -66,14 +70,16 @@ export default function QOTEInfo() {
               <p className="text-sm text-gray-600">Quantum Oscillator Theory of Everything</p>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-purple-600 hover:text-purple-800"
-          >
-            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </Button>
+          {!expanded && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-purple-600 hover:text-purple-800"
+            >
+              {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </Button>
+          )}
         </div>
       </CardHeader>
 
