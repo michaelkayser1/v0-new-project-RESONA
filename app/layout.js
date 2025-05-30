@@ -1,6 +1,7 @@
 export const metadata = {
   title: "Resona Chat API",
   description: "API for Resona chat integration",
+    generator: 'v0.dev'
 }
 
 export default function RootLayout({ children }) {
@@ -10,3 +11,6 @@ export default function RootLayout({ children }) {
     </html>
   )
 }
+
+
+import './globals.css'
