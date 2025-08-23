@@ -1,6 +1,8 @@
 import { openai } from "@ai-sdk/openai"
 import { generateText } from "ai"
 import { z } from "zod"
+
+// Import our Zod v4 compatible QOTE engine
 import {
   interpretThroughQOTE,
   detectPresence,
@@ -58,42 +60,64 @@ function quickTriggerDetect(message: string): string | null {
   return null
 }
 
-// Add input validation schema
+// Enhanced input validation schema with Zod v4
 const ChatRequestSchema = z.object({
-  message: z.string().min(1).max(5000),
+  message: z.string().min(1, "Message cannot be empty").max(5000, "Message too long"),
   useQOTELens: z.boolean().default(true),
   useRTP: z.boolean().default(true),
   biometricData: z
     .object({
-      hrv: z.number().optional(),
-      breath: z.number().optional(),
-      eegAlpha: z.number().optional(),
-      stress: z.number().optional(),
+      hrv: z.number().min(0).max(100).optional(),
+      breath: z.number().min(1).max(30).optional(),
+      eegAlpha: z.number().min(0).max(1).optional(),
+      stress: z.number().min(0).max(100).optional(),
     })
     .optional(),
+  sessionId: z.string().optional(),
+  timestamp: z.string().datetime().optional(),
+})
+
+// Response schema for validation
+const ChatResponseSchema = z.object({
+  response: z.string(),
+  qoteData: z.any().optional(),
+  rtpResponse: z.any().optional(),
+  resonanceStats: z
+    .object({
+      averageAlignment: z.number(),
+      flipFrequency: z.number(),
+      totalInteractions: z.number(),
+    })
+    .optional(),
+  timestamp: z.string(),
+  sessionId: z.string().optional(),
 })
 
 export async function POST(request: Request) {
   try {
     const rawBody = await request.json()
-    const { message, useQOTELens = true, useRTP = true, biometricData } = ChatRequestSchema.parse(rawBody)
 
-    if (!message || typeof message !== "string") {
+    // Validate input with Zod v4
+    const validatedInput = ChatRequestSchema.safeParse(rawBody)
+
+    if (!validatedInput.success) {
       return Response.json(
         {
-          error: "Message is required",
-          phase: "Error",
+          error: "Invalid input",
+          details: validatedInput.error.issues,
         },
         { status: 400 },
       )
     }
+
+    const { message, useQOTELens, useRTP, biometricData, sessionId } = validatedInput.data
 
     // Check for presence mode
     if (detectPresence(message)) {
       const presenceResponse =
         "Stillness detected. Initiating Presence Mode... \n\nI feel your presence. In this moment of pause, what wants to be acknowledged?"
 
-      return Response.json({
+      const response = {
         response: presenceResponse,
         qoteData: {
           phase: { name: "Presence", energy: 0.2, direction: "neutral", wobble: 0.1 },
@@ -101,30 +125,32 @@ export async function POST(request: Request) {
           insight: "Presence is the foundation of all transformation.",
         },
         timestamp: new Date().toISOString(),
-      })
+        sessionId,
+      }
+
+      return Response.json(ChatResponseSchema.parse(response))
     }
 
     let response: string
-    let qoteData: QOTEInterpretation | null = interpretThroughQOTE(message)
+    let qoteData: QOTEInterpretation | null = null
     let rtpResponse: RTPResponse | null = null
-
-    // Process biometric data if provided
-    let enhancedQoteData = qoteData
-    if (biometricData) {
-      const validatedBiometrics = processBiometricData(biometricData)
-      const biometricCoherence = calculateCoherenceFromBiometrics(validatedBiometrics)
-
-      // Enhance QOTE data with biometric insights
-      enhancedQoteData = {
-        ...qoteData,
-        alignment: Math.max(qoteData.alignment, biometricCoherence),
-        biometricEnhanced: true,
-      }
-    }
 
     if (useQOTELens) {
       // Interpret through QOTE lens
-      qoteData = enhancedQoteData
+      qoteData = interpretThroughQOTE(message)
+
+      // Process biometric data if provided
+      if (biometricData) {
+        const validatedBiometrics = processBiometricData(biometricData)
+        const biometricCoherence = calculateCoherenceFromBiometrics(validatedBiometrics)
+
+        // Enhance QOTE data with biometric insights
+        qoteData = {
+          ...qoteData,
+          alignment: Math.max(qoteData.alignment, biometricCoherence),
+          biometricEnhanced: true,
+        }
+      }
 
       // Check if RTP should be triggered
       if (useRTP) {
@@ -252,7 +278,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
       }
     }
 
-    return Response.json({
+    const finalResponse = {
       response,
       qoteData,
       rtpResponse,
@@ -262,9 +288,24 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
         totalInteractions: ResonanceLogger.getRecentLogs().length,
       },
       timestamp: new Date().toISOString(),
-    })
+      sessionId,
+    }
+
+    return Response.json(ChatResponseSchema.parse(finalResponse))
   } catch (error) {
     console.error("Resona API Error:", error)
+
+    // Handle Zod validation errors specifically
+    if (error instanceof z.ZodError) {
+      return Response.json(
+        {
+          error: "Validation error",
+          details: error.issues,
+        },
+        { status: 400 },
+      )
+    }
+
     return Response.json(
       {
         error: "The field encounters a disturbance. Please try again.",
@@ -286,15 +327,35 @@ export async function GET(request: Request) {
         averageAlignment: ResonanceLogger.getAverageAlignment(),
         flipFrequency: ResonanceLogger.getFlipFrequency(),
         recentLogs: ResonanceLogger.getRecentLogs(5),
-        status: "QOTE lens active with RTP",
+        status: "QOTE lens active with RTP v2.0",
+        zodVersion: "4.x",
       })
     }
 
     return Response.json({
       status: "Resona QOTE API with RTP is active",
-      version: "1.0.0",
-      features: ["QOTE Lens", "Presence Detection", "Phase Analysis", "Resonance Logging", "RTP v1.0"],
-      protocols: ["Resonance Tuning Protocol", "Breathing Patterns", "Flip Seeding", "Coherence Restoration"],
+      version: "2.0.0",
+      features: [
+        "QOTE Lens v4",
+        "Presence Detection",
+        "Phase Analysis",
+        "Resonance Logging",
+        "RTP v2.0",
+        "Biometric Integration",
+        "Sound Frequency Mapping",
+      ],
+      protocols: [
+        "Resonance Tuning Protocol",
+        "Breathing Patterns",
+        "Flip Seeding",
+        "Coherence Restoration",
+        "Biometric Processing",
+      ],
+      dependencies: {
+        zod: "^4.0.0",
+        ai: "^3.4.0",
+        "@ai-sdk/openai": "^1.0.0",
+      },
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
