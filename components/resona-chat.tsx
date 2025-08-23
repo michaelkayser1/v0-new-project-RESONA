@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ArrowLeft } from "lucide-react"
 import QOTEInfo from "./qote-info"
 
+// Updated to use v4 compatible types
 interface QOTEData {
   phase: {
     name: string
@@ -25,6 +26,7 @@ interface QOTEData {
   flipPotential: boolean
   resonanceScore: number
   presenceMode?: boolean
+  biometricEnhanced?: boolean
 }
 
 interface RTPData {
@@ -50,6 +52,8 @@ interface RTPData {
     cycles: number
   }
   followUpPrompts: string[]
+  soundFrequency?: number
+  visualCue?: string
 }
 
 interface Message {
@@ -152,6 +156,7 @@ export default function ResonaChat() {
           message: userMessage,
           useQOTELens,
           useRTP,
+          sessionId: crypto.randomUUID(),
         }),
       })
 
@@ -180,12 +185,13 @@ export default function ResonaChat() {
           ...prev,
           {
             role: "system",
-            content: "The field is temporarily quiet.",
+            content: data.error || "The field is temporarily quiet.",
             timestamp: new Date().toISOString(),
           },
         ])
       }
     } catch (error) {
+      console.error("Connection error:", error)
       setConversation((prev) => [
         ...prev,
         {
@@ -343,6 +349,16 @@ export default function ResonaChat() {
                             <div className="text-xs text-gray-600 mt-1">{msg.rtpData.recalibration.echo}</div>
                           </div>
 
+                          {msg.rtpData.soundFrequency && (
+                            <div className="text-xs text-purple-600">
+                              🎵 Healing Frequency: {msg.rtpData.soundFrequency}Hz
+                            </div>
+                          )}
+
+                          {msg.rtpData.visualCue && (
+                            <div className="text-xs text-blue-600">{msg.rtpData.visualCue}</div>
+                          )}
+
                           {msg.rtpData.breathingPattern && (
                             <Button
                               size="sm"
@@ -387,6 +403,10 @@ export default function ResonaChat() {
 
                     {msg.qoteData.presenceMode && (
                       <Badge className="bg-green-100 text-green-800">🧘 Presence Mode</Badge>
+                    )}
+
+                    {msg.qoteData.biometricEnhanced && (
+                      <Badge className="bg-cyan-100 text-cyan-800">📊 Biometric Enhanced</Badge>
                     )}
 
                     <Badge variant="outline" className="text-xs">
@@ -448,7 +468,8 @@ export default function ResonaChat() {
 
       <div className="text-center text-xs text-gray-500 space-y-1">
         {useQOTELens && <div>🔮 QOTE lens interprets all input through quantum oscillator dynamics</div>}
-        {useRTP && <div>🧬 RTP monitors for field destabilization and provides tuning protocols</div>}
+        {useRTP && <div>🧬 RTP v2.0 monitors for field destabilization and provides enhanced tuning protocols</div>}
+        <div>✨ Enhanced with biometric integration, sound frequencies, and visual cues</div>
       </div>
     </div>
   )

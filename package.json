@@ -1,41 +1,57 @@
 {
   "name": "qote-resona",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
+  "description": "Quantum Oscillator Theory of Everything + Resona AI Interface",
+  "keywords": [
+    "consciousness",
+    "AI",
+    "quantum",
+    "resonance",
+    "healing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qote/resona-interface"
+  },
+  "license": "MIT",
+  "author": "Dr. Michael Kayser <mike@kayser-medical.com>",
   "scripts": {
     "build": "next build",
+    "deploy-check": "bash scripts/deploy-check.sh",
     "dev": "next dev",
-    "postinstall": "pnpm install --no-frozen-lockfile",
+    "postinstall": "echo '🌊 QOTE + Resona dependencies installed successfully'",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@ai-sdk/openai": "latest",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
     "@types/three": "^0.158.0",
     "ai": "latest",
-    "autoprefixer": "^10.0.1",
+    "autoprefixer": "^10.4.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.454.0",
     "next": "14.2.16",
-    "postcss": "^8",
+    "postcss": "^8.4.32",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.5.5",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
     "three": "latest",
-    "typescript": "^5",
+    "typescript": "^5.3.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^22",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "eslint": "^8.56.0",
     "eslint-config-next": "14.0.0",
     "postcss": "^8.5",
     "typescript": "^5"
