@@ -3,24 +3,11 @@
   "version": "2.0.0",
   "private": true,
   "description": "Quantum Oscillator Theory of Everything + Resona AI Interface",
-  "keywords": [
-    "consciousness",
-    "AI",
-    "quantum",
-    "resonance",
-    "healing"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/qote/resona-interface"
-  },
-  "license": "MIT",
-  "author": "Dr. Michael Kayser <mike@kayser-medical.com>",
   "scripts": {
     "build": "next build",
-    "deploy-check": "bash scripts/deploy-check.sh",
     "dev": "next dev",
-    "postinstall": "echo '🌊 QOTE + Resona dependencies installed successfully'",
+    "fix-deployment": "bash scripts/fix-deployment.sh",
+    "postinstall": "echo '🌊 QOTE + Resona ready for quantum manifestation'",
     "lint": "next lint",
     "start": "next start",
     "type-check": "tsc --noEmit"
