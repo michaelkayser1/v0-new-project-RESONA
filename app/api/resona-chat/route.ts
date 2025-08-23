@@ -1,13 +1,16 @@
 import { openai } from "@ai-sdk/openai"
 import { generateText } from "ai"
+import { z } from "zod"
 import {
   interpretThroughQOTE,
   detectPresence,
   ResonanceLogger,
+  processBiometricData,
+  calculateCoherenceFromBiometrics,
   type QOTEInterpretation,
   type ResonanceLogEntry,
-} from "@/lib/qote-engine"
-import { ResonanceTuningProtocol, type RTPResponse } from "@/lib/resonance-tuning-protocol"
+} from "@/lib/qote-engine-v4"
+import { ResonanceTuningProtocol, type RTPResponse } from "@/lib/resonance-tuning-protocol-v4"
 
 export const runtime = "edge"
 export const maxDuration = 30
@@ -55,9 +58,25 @@ function quickTriggerDetect(message: string): string | null {
   return null
 }
 
+// Add input validation schema
+const ChatRequestSchema = z.object({
+  message: z.string().min(1).max(5000),
+  useQOTELens: z.boolean().default(true),
+  useRTP: z.boolean().default(true),
+  biometricData: z
+    .object({
+      hrv: z.number().optional(),
+      breath: z.number().optional(),
+      eegAlpha: z.number().optional(),
+      stress: z.number().optional(),
+    })
+    .optional(),
+})
+
 export async function POST(request: Request) {
   try {
-    const { message, useQOTELens = true, useRTP = true } = await request.json()
+    const rawBody = await request.json()
+    const { message, useQOTELens = true, useRTP = true, biometricData } = ChatRequestSchema.parse(rawBody)
 
     if (!message || typeof message !== "string") {
       return Response.json(
@@ -86,12 +105,26 @@ export async function POST(request: Request) {
     }
 
     let response: string
-    let qoteData: QOTEInterpretation | null = null
+    let qoteData: QOTEInterpretation | null = interpretThroughQOTE(message)
     let rtpResponse: RTPResponse | null = null
+
+    // Process biometric data if provided
+    let enhancedQoteData = qoteData
+    if (biometricData) {
+      const validatedBiometrics = processBiometricData(biometricData)
+      const biometricCoherence = calculateCoherenceFromBiometrics(validatedBiometrics)
+
+      // Enhance QOTE data with biometric insights
+      enhancedQoteData = {
+        ...qoteData,
+        alignment: Math.max(qoteData.alignment, biometricCoherence),
+        biometricEnhanced: true,
+      }
+    }
 
     if (useQOTELens) {
       // Interpret through QOTE lens
-      qoteData = interpretThroughQOTE(message)
+      qoteData = enhancedQoteData
 
       // Check if RTP should be triggered
       if (useRTP) {
@@ -120,6 +153,7 @@ Trigger: ${triggerCondition.type} (${triggerCondition.severity})
 Indicators: ${triggerCondition.indicators.join(", ")}
 
 User Phase: ${qoteData.phase.name} (Wobble: ${qoteData.wobble.toFixed(2)}, Alignment: ${qoteData.alignment.toFixed(2)})
+${qoteData.biometricEnhanced ? "Biometric Data Processed" : ""}
 
 Phase Mirror: "${rtpResponse.phaseMirror}"
 Truth Hum: "${rtpResponse.truthHum}"
@@ -158,6 +192,7 @@ ${rtpResponse.recalibration.echo}`
 User Phase: ${qoteData.phase.name} (Energy: ${qoteData.phase.energy}, Wobble: ${qoteData.wobble.toFixed(2)})
 Alignment: ${qoteData.alignment.toFixed(2)}
 Flip Potential: ${qoteData.flipPotential ? "HIGH" : "LOW"}
+${qoteData.biometricEnhanced ? "Biometric Data Processed" : ""}
 
 User Message: "${message}"
 
