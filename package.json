@@ -10,7 +10,9 @@
     "postinstall": "echo '🌊 QOTE + Resona ready for quantum manifestation'",
     "lint": "next lint",
     "start": "next start",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "setup-check": "node scripts/setup-check.js",
+    "env:setup": "cp .env.example .env.local && echo '✓ Created .env.local - now edit it with your DATABASE_URL'"
   },
   "dependencies": {
     "@ai-sdk/openai": "latest",
@@ -25,6 +27,7 @@
     "autoprefixer": "^10.4.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "17.2.3",
     "lucide-react": "^0.454.0",
     "next": "14.2.35",
     "postcss": "^8.4.32",
