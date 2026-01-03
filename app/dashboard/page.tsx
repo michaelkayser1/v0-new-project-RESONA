@@ -9,6 +9,7 @@ import { VolatilityPanel } from '@/components/resona/volatility-panel';
 import { Timeline } from '@/components/resona/timeline';
 import { ReturnSummaryInput } from '@/components/resona/return-summary-input';
 import { AlertsPanel } from '@/components/resona/alerts-panel';
+import { ResearchExportPanel } from '@/components/resona/research-export-panel';
 import type { CoherenceMetrics } from '@/lib/coherence/calculator';
 import type { Event, Checkpoint, ReturnMapping, Incident } from '@/lib/db/types';
 
@@ -243,7 +244,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Bottom Row - Interaction */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ReturnSummaryInput
           onSubmit={handleReturnMappingSubmit}
           loading={loading}
@@ -253,6 +254,7 @@ export default function DashboardPage() {
           returnMapping={data.latest_return_mapping}
           incidents={data.recent_incidents}
         />
+        <ResearchExportPanel currentSessionId={sessionId} />
       </div>
 
       {/* Footer */}
