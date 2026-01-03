@@ -13,7 +13,6 @@ const nextConfig = {
     serverComponentsExternalPackages: ['three'],
     esmExternals: 'loose'
   },
-  transpilePackages: ['three'],
   webpack: (config, { isServer }) => {
     // Handle Three.js on the server side
     if (isServer) {
