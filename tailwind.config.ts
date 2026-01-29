@@ -1,6 +1,10 @@
 import type { Config } from "tailwindcss"
+import colors from "tailwindcss/colors"
 
 const config: Config = {
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   darkMode: ["class"],
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -97,5 +101,7 @@ const config: Config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
+  // Use modern color names to silence deprecation warnings
+  // lightBlue -> sky, warmGray -> stone, trueGray -> neutral, coolGray -> gray, blueGray -> slate
 }
 export default config
