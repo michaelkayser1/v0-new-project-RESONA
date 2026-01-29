@@ -124,7 +124,7 @@ Click "Deploy" and wait for build completion.
 
 1. This requires your main site to proxy requests
 2. Add to your main site's configuration:
-   ```nginx
+   \`\`\`nginx
    location /resona {
        proxy_pass https://your-vercel-app.vercel.app;
    }
