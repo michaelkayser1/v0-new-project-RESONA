@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Research Archive Color Palette */
+  --background: 222 47% 4%;
+  --foreground: 210 40% 96%;
+  --card: 222 47% 8%;
+  --card-foreground: 210 40% 96%;
+  --popover: 222 47% 8%;
+  --popover-foreground: 210 40% 96%;
+  --primary: 214 84% 56%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 262 47% 45%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 45 93% 47%;
+  --accent-foreground: 222 47% 4%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217 33% 20%;
+  --input: 217 33% 17%;
+  --ring: 214 84% 56%;
+  --radius: 0.5rem;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Research Archive Typography */
+.font-research-heading {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-research-body {
+  font-family: var(--font-source-serif), Georgia, serif;
+}
+
+.font-research-mono {
+  font-family: var(--font-jetbrains-mono), "Fira Code", monospace;
+}
+
+/* Subtle oscillatory animation for hero */
+@keyframes oscillate {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scale(1.02);
+  }
+}
+
+.animate-oscillate {
+  animation: oscillate 8s ease-in-out infinite;
+}
+
+.animate-oscillate-delayed {
+  animation: oscillate 8s ease-in-out infinite;
+  animation-delay: 4s;
+}
+
+/* Timeline connector line */
+.timeline-line {
+  background: linear-gradient(
+    to right,
+    transparent,
+    hsl(var(--primary) / 0.3) 10%,
+    hsl(var(--primary) / 0.5) 50%,
+    hsl(var(--primary) / 0.3) 90%,
+    transparent
+  );
+}
+
+/* Archive card hover effect */
+.archive-card {
+  transition: all 0.3s ease;
+}
+
+.archive-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px hsl(var(--primary) / 0.15);
+}

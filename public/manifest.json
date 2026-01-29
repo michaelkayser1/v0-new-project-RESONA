@@ -1,0 +1,26 @@
+{
+  "name": "Kayser Autoethnographic Project",
+  "short_name": "Kayser Research",
+  "description": "AI-Augmented Theoretical Physics Development: An 8-Year Self-Study documenting QOTE and Resona OS development through systematic AI collaboration.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070b12",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/k-research.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/k-research.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "research", "science"],
+  "lang": "en-US"
+}
