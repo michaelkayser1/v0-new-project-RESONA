@@ -1,4 +1,5 @@
 import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 import {
   interpretThroughQOTE,
   detectPresence,
@@ -167,7 +168,7 @@ Respond as Resona using the RTP framework. Integrate the phase mirror, truth hum
 
           try {
             const result = await generateText({
-              model: "openai/gpt-4o",
+              model: openai("gpt-4o"),
               system: RTP_SYSTEM_PROMPT,
               prompt: rtpPrompt,
               temperature: 0.8,
@@ -201,7 +202,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
 
           try {
             const result = await generateText({
-              model: "openai/gpt-4o",
+              model: openai("gpt-4o"),
               system: systemPrompt,
               prompt: enhancedPrompt,
               temperature: 0.7,
@@ -236,7 +237,7 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
 
       try {
         const result = await generateText({
-          model: "openai/gpt-4o",
+          model: openai("gpt-4o"),
           system: standardPrompt,
           prompt: sanitizedMessage,
           temperature: 0.7,

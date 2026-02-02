@@ -5,7 +5,6 @@ import { QOTERedisService } from "@/lib/redis"
 import { interpretThroughQOTE, detectPresence, type QOTEInterpretation } from "@/lib/qote-engine"
 import { ResonanceTuningProtocol, type RTPResponse } from "@/lib/resonance-tuning-protocol"
 
-export const runtime = "edge"
 export const maxDuration = 30
 
 // Generate session ID
