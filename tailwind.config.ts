@@ -1,6 +1,8 @@
 import type { Config } from 'tailwindcss'
+import colors from 'tailwindcss/colors'
 
-// all in fixtures is set to tailwind v3 as interims solutions
+// Silence deprecated color name warnings in Tailwind v3
+const { lightBlue, warmGray, trueGray, coolGray, blueGray, ...safeColors } = colors as Record<string, unknown>
 
 const config: Config = {
   darkMode: ['class'],
