@@ -16,29 +16,32 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Dr. Michael A. Kayser | Clinical Geneticist",
+  title: "Resona OS | Coherence Technology for Health Systems",
   description:
-    "Clinical geneticist helping people make sense of complex systems — medical, human, and sometimes technological. Grounded care, careful thinking.",
+    "A clinical intelligence platform that detects drift in physiology, behavior, and decision-making — and guides systems back to stable function. Built by Kayser Medical PLLC.",
   keywords: [
-    "clinical genetics",
-    "medical genetics",
-    "systems thinking",
-    "human-AI collaboration",
-    "Dr. Michael Kayser",
+    "coherence technology",
+    "clinical intelligence",
+    "health technology",
+    "HRV monitoring",
+    "clinical decision support",
+    "Resona OS",
+    "Kayser Medical",
   ],
   openGraph: {
-    title: "Dr. Michael A. Kayser, DO, FACMG",
-    description: "Clinical geneticist. Pattern observer. Careful collaborator.",
+    title: "Resona OS | Coherence Technology for Health Systems",
+    description:
+      "Helping humans and intelligent systems return to coherence. A clinical intelligence platform by Kayser Medical PLLC.",
     type: "website",
   },
-    generator: 'v0.app'
+  generator: "v0.app",
 }
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#faf9f7",
+  themeColor: "#0A1628",
 }
 
 export default function RootLayout({
@@ -47,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable} bg-[#faf9f7]`}>
+    <html lang="en" className={`${playfair.variable} ${inter.variable} bg-[#0A1628]`}>
       <body className="font-sans">{children}</body>
     </html>
   )

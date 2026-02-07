@@ -16,27 +16,27 @@
     --font-sans: var(--font-inter), system-ui, sans-serif;
     --font-serif: var(--font-playfair-display), Georgia, serif;
 
-    /* Warm, calm light theme for Kayser Medical */
-    --background: 40 30% 98%;
-    --foreground: 220 20% 20%;
-    --card: 40 20% 96%;
-    --card-foreground: 220 20% 20%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 20%;
-    --primary: 220 60% 45%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 40 15% 92%;
-    --secondary-foreground: 220 20% 30%;
-    --muted: 40 10% 90%;
-    --muted-foreground: 220 10% 45%;
-    --accent: 160 30% 45%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
+    /* Resona OS — Deep navy clinical platform */
+    --background: 216 52% 10%;
+    --foreground: 210 20% 95%;
+    --card: 216 45% 13%;
+    --card-foreground: 210 20% 95%;
+    --popover: 216 50% 11%;
+    --popover-foreground: 210 20% 95%;
+    --primary: 168 71% 51%;
+    --primary-foreground: 216 52% 10%;
+    --secondary: 216 35% 18%;
+    --secondary-foreground: 210 20% 85%;
+    --muted: 216 30% 16%;
+    --muted-foreground: 210 15% 55%;
+    --accent: 40 55% 55%;
+    --accent-foreground: 216 52% 10%;
+    --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 40 15% 88%;
-    --input: 40 15% 92%;
-    --ring: 220 60% 45%;
-    --radius: 0.5rem;
+    --border: 216 30% 18%;
+    --input: 216 35% 16%;
+    --ring: 168 71% 51%;
+    --radius: 0.625rem;
   }
 }
 
@@ -57,53 +57,71 @@
   font-family: var(--font-serif);
 }
 
-/* Subtle animations */
+/* Animations */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes gentle-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
 .animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
+  animation: fade-in 0.7s ease-out forwards;
 }
 
-.animate-gentle-float {
-  animation: gentle-float 6s ease-in-out infinite;
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
 }
 
-/* Stagger children animations */
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Section reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
 .stagger-children > * {
   opacity: 0;
-  animation: fade-in 0.5s ease-out forwards;
+  animation: fade-in 0.6s ease-out forwards;
 }
-.stagger-children > *:nth-child(1) {
-  animation-delay: 0.1s;
+.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+
+/* Frosted glass */
+.glass {
+  background: hsla(216, 52%, 10%, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
-.stagger-children > *:nth-child(2) {
-  animation-delay: 0.2s;
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(168, 71%, 51%), hsl(168, 71%, 70%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-.stagger-children > *:nth-child(3) {
-  animation-delay: 0.3s;
-}
-.stagger-children > *:nth-child(4) {
-  animation-delay: 0.4s;
-}
-.stagger-children > *:nth-child(5) {
-  animation-delay: 0.5s;
+
+/* Gold accent text */
+.gold-text {
+  color: hsl(40, 55%, 55%);
 }
