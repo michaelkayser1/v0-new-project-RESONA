@@ -1,9 +1,6 @@
 import type { Config } from 'tailwindcss'
 import colors from 'tailwindcss/colors'
 
-// Silence deprecated color name warnings in Tailwind v3
-const { lightBlue, warmGray, trueGray, coolGray, blueGray, ...safeColors } = colors as Record<string, unknown>
-
 const config: Config = {
   darkMode: ['class'],
   content: [
@@ -15,6 +12,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Map deprecated Tailwind color names to their new equivalents
+        lightBlue: colors.sky,
+        warmGray: colors.stone,
+        trueGray: colors.neutral,
+        coolGray: colors.gray,
+        blueGray: colors.slate,
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
