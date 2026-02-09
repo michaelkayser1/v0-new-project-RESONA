@@ -2,8 +2,9 @@ import Link from "next/link"
 
 const footerLinks = [
   { href: "#platform", label: "Platform" },
+  { href: "/resona-api", label: "Resona API" },
+  { href: "/resona-api/docs", label: "API Docs" },
   { href: "#science", label: "Science" },
-  { href: "#clinicians", label: "For Clinicians" },
   { href: "#about", label: "About" },
   { href: "#contact", label: "Contact" },
 ]

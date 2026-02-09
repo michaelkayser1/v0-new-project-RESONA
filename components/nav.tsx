@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react"
 
 const links = [
   { href: "#platform", label: "Platform" },
+  { href: "/resona-api", label: "Resona API" },
   { href: "#science", label: "Science" },
   { href: "#clinicians", label: "For Clinicians" },
   { href: "#about", label: "About" },

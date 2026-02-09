@@ -10,6 +10,7 @@ import { ScienceSection } from "@/components/sections/science"
 import { FounderSection } from "@/components/sections/founder"
 import { ContactSection } from "@/components/sections/contact-form"
 
+// Resona OS v2 — includes Resona API, Docs, and Request Access pages
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
