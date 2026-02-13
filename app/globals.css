@@ -2,126 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+  --medical-blue: #4a90e2;
+  --medical-dark: #0a2540;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-medical-blue hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg;
   }
-  .text-pretty {
-    text-wrap: pretty;
+
+  .btn-outline {
+    @apply border border-white text-white hover:bg-white hover:text-gray-900 font-medium py-3 px-6 rounded-lg transition-all duration-300;
   }
-}
 
-@layer base {
-  :root {
-    --font-sans: var(--font-inter), system-ui, sans-serif;
-    --font-serif: var(--font-playfair-display), Georgia, serif;
-
-    /* Resona OS — Deep navy clinical platform */
-    --background: 216 52% 10%;
-    --foreground: 210 20% 95%;
-    --card: 216 45% 13%;
-    --card-foreground: 210 20% 95%;
-    --popover: 216 50% 11%;
-    --popover-foreground: 210 20% 95%;
-    --primary: 168 71% 51%;
-    --primary-foreground: 216 52% 10%;
-    --secondary: 216 35% 18%;
-    --secondary-foreground: 210 20% 85%;
-    --muted: 216 30% 16%;
-    --muted-foreground: 210 15% 55%;
-    --accent: 40 55% 55%;
-    --accent-foreground: 216 52% 10%;
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 216 30% 18%;
-    --input: 216 35% 16%;
-    --ring: 168 71% 51%;
-    --radius: 0.625rem;
+  .form-input {
+    @apply w-full px-4 py-3 bg-black/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-medical-blue focus:ring-1 focus:ring-medical-blue;
   }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  html {
-    @apply bg-background;
-    scroll-behavior: smooth;
-  }
-  body {
-    @apply bg-background text-foreground antialiased;
-  }
-}
-
-.font-serif {
-  font-family: var(--font-serif);
-}
-
-/* Animations */
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(32px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.7s ease-out forwards;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* Section reveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Stagger children */
-.stagger-children > * {
-  opacity: 0;
-  animation: fade-in 0.6s ease-out forwards;
-}
-.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
-.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
-.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
-.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
-
-/* Frosted glass */
-.glass {
-  background: hsla(216, 52%, 10%, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-/* Gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, hsl(168, 71%, 51%), hsl(168, 71%, 70%));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Gold accent text */
-.gold-text {
-  color: hsl(40, 55%, 55%);
 }
