@@ -13,7 +13,6 @@ import {
 } from "@/lib/qote-engine-v4"
 import { ResonanceTuningProtocol, type RTPResponse } from "@/lib/resonance-tuning-protocol-v4"
 
-export const runtime = "edge"
 export const maxDuration = 30
 
 // QOTE-Enhanced System Prompts by Phase
