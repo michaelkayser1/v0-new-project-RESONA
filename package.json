@@ -1,0 +1,48 @@
+{
+  "name": "qote-resona",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Quantum Oscillator Theory of Everything + Resona AI Interface",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "fix-deployment": "bash scripts/fix-deployment.sh",
+    "postinstall": "echo '🌊 QOTE + Resona ready for quantum manifestation'",
+    "lint": "next lint",
+    "start": "next start",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "ai": "^3.4.0",
+    "autoprefixer": "^10.4.16",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.294.0",
+    "next": "14.0.0",
+    "openai": "latest",
+    "postcss": "^8.4.32",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sswr": "latest",
+    "tailwind-merge": "^2.0.0",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "1.0.7",
+    "three": "0.182.0",
+    "typescript": "^5.3.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.0.0",
+    "postcss": "^8.5",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
