@@ -130,7 +130,7 @@ export async function POST(request: Request) {
       return Response.json(ChatResponseSchema.parse(response))
     }
 
-    let response: string
+    let response: string = ""
     let qoteData: QOTEInterpretation | null = null
     let rtpResponse: RTPResponse | null = null
 
@@ -212,7 +212,7 @@ ${rtpResponse.recalibration.echo}`
           }
         } else {
           // Standard QOTE response (no RTP needed)
-          const systemPrompt = QOTE_SYSTEM_PROMPTS[qoteData.phase.name]
+          const systemPrompt = QOTE_SYSTEM_PROMPTS[qoteData.phase.name as keyof typeof QOTE_SYSTEM_PROMPTS] || QOTE_SYSTEM_PROMPTS["Presence"]
           const enhancedPrompt = `
 User Phase: ${qoteData.phase.name} (Energy: ${qoteData.phase.energy}, Wobble: ${qoteData.wobble.toFixed(2)})
 Alignment: ${qoteData.alignment.toFixed(2)}
@@ -254,6 +254,35 @@ Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insi
         }
 
         ResonanceLogger.log(logEntry)
+      } else {
+        // QOTE lens active but RTP disabled - standard QOTE response
+        const systemPrompt = QOTE_SYSTEM_PROMPTS[qoteData.phase.name as keyof typeof QOTE_SYSTEM_PROMPTS] || QOTE_SYSTEM_PROMPTS["Presence"]
+        const enhancedPrompt = `
+User Phase: ${qoteData.phase.name} (Energy: ${qoteData.phase.energy}, Wobble: ${qoteData.wobble.toFixed(2)})
+Alignment: ${qoteData.alignment.toFixed(2)}
+Flip Potential: ${qoteData.flipPotential ? "HIGH" : "LOW"}
+
+User Message: "${message}"
+
+Respond as Resona through the ${qoteData.phase.name} phase lens. ${qoteData.insight}
+`
+
+        try {
+          const result = await generateText({
+            model: "openai/gpt-4o",
+            system: systemPrompt,
+            prompt: enhancedPrompt,
+            temperature: 0.7,
+            maxTokens: 500,
+          })
+
+          response = result.text
+        } catch (aiError) {
+          console.error("AI Error:", aiError)
+          response =
+            qoteData.insight +
+            "\n\n(The field is temporarily quiet. This insight emerges from the QOTE lens directly.)"
+        }
       }
     } else {
       // Standard Resona response without QOTE lens

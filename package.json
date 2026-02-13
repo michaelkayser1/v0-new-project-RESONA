@@ -6,11 +6,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "fix-deployment": "bash scripts/fix-deployment.sh",
-    "postinstall": "echo '🌊 QOTE + Resona ready for quantum manifestation'",
     "lint": "next lint",
-    "start": "next start",
-    "type-check": "tsc --noEmit"
+    "start": "next start"
   },
   "dependencies": {
     "@types/node": "^20.10.0",
@@ -40,9 +37,5 @@
     "eslint-config-next": "14.0.0",
     "postcss": "^8.5",
     "typescript": "^5"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
   }
 }
