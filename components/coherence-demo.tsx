@@ -28,8 +28,19 @@ export function CoherenceDemo() {
     let time = 0
 
     const draw = () => {
-      const w = canvas.width / dpr
-      const h = canvas.height / dpr
+      const rect = canvas.getBoundingClientRect()
+      if (rect.width === 0 || rect.height === 0) {
+        animationRef.current = requestAnimationFrame(draw)
+        return
+      }
+      // Re-sync canvas size on each frame to handle layout shifts
+      if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
+        canvas.width = rect.width * dpr
+        canvas.height = rect.height * dpr
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      }
+      const w = rect.width
+      const h = rect.height
       ctx.clearRect(0, 0, w, h)
       time += 0.012
 
