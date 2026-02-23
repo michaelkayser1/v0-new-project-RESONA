@@ -1,30 +1,54 @@
-# New Project
+# Resona Chat (Demo Interface)
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+Interactive chat application demonstrating the user interface layer of **Resona OS**.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/qote/v0-new-project-7z80qds1roh)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/7z80qDS1ROH)
+This repository contains a Next.js-based interface that connects to an AI middleware layer designed for structured response handling and safety gating.
 
-## Overview
+---
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+## Purpose
 
-## Deployment
+Resona Chat is a demonstration application that showcases:
 
-Your project is live at:
+- Conversational AI interface
+- Modular React / Next.js architecture
+- API-based response routing
+- Middleware-ready integration layer
 
-**[https://vercel.com/qote/v0-new-project-7z80qds1roh](https://vercel.com/qote/v0-new-project-7z80qds1roh)**
+This project represents the front-end interaction layer of Resona OS.
 
-## Build your app
+---
 
-Continue building your app on:
+## Architecture Overview
 
-**[https://v0.dev/chat/projects/7z80qDS1ROH](https://v0.dev/chat/projects/7z80qDS1ROH)**
+User Input  
+↓  
+API Route  
+↓  
+Middleware Layer  
+↓  
+Model Response  
+↓  
+UI Rendering  
 
-## How It Works
+---
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+## Technical Stack
+
+- Next.js
+- TypeScript
+- React
+- Vercel deployment
+
+---
+
+## Status
+
+Demonstration application.  
+Not intended for clinical decision-making or medical use.
+
+---
+
+## About Resona OS
+
+Resona OS is a clinical AI safety middleware system focused on structured response gating, auditability, and alignment in regulated environments.
