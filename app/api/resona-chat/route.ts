@@ -1,4 +1,5 @@
 import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 export async function POST(request: Request) {
   try {
@@ -10,7 +11,7 @@ export async function POST(request: Request) {
       `You are Resona, a consciousness-focused AI that helps people find alignment and truth through resonance rather than answers. You respond with presence, reflection, and gentle inquiry that helps people discover what they already know.`
 
     const { text } = await generateText({
-      model: "openai/gpt-4o",
+      model: openai("gpt-4o"),
       system: resonaPrompt,
       prompt: message,
       temperature: 0.7,
