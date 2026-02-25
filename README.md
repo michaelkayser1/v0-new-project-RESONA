@@ -1,5 +1,8 @@
 # Resona Chat (Demo Interface)
 
+**Live Demo:** https://v0-resona-chat-api.vercel.app  
+**Main Platform:** https://kayser-medical.com
+
 Interactive chat application demonstrating the user interface layer of **Resona OS**.
 
 This repository contains a Next.js-based interface that connects to an AI middleware layer designed for structured response handling and safety gating.
