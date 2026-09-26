@@ -31,10 +31,10 @@ export default function ResonaChat() {
       if (data.response) {
         setConversation((prev) => [...prev, { role: "resona", content: data.response }])
       } else {
-        setConversation((prev) => [...prev, { role: "system", content: "The field is temporarily quiet." }])
+        setConversation((prev) => [...prev, { role: "system", content: "The chat service did not return a response." }])
       }
     } catch (error) {
-      setConversation((prev) => [...prev, { role: "system", content: "Connection to the field interrupted." }])
+      setConversation((prev) => [...prev, { role: "system", content: "Connection to the chat service was interrupted." }])
     }
 
     setIsLoading(false)
