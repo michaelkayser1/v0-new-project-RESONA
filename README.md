@@ -5,7 +5,7 @@
 
 Interactive chat application demonstrating the user interface layer of **Resona OS**.
 
-This repository contains a Next.js-based interface that connects to an AI middleware layer designed for structured response handling and safety gating.
+This repository contains a Next.js-based exploratory interface. It is a chat demo, not a demonstration that a separately governed action gate is active in this deployment.
 
 ---
 
@@ -54,4 +54,4 @@ Not intended for clinical decision-making or medical use.
 
 ## About Resona OS
 
-Resona OS is a clinical AI safety middleware system focused on structured response gating, auditability, and alignment in regulated environments.
+Resona OS is an experimental control architecture focused on structured response validation, authority checks, and auditability. See the [Resona OS repository](https://github.com/michaelkayser1/Resona-OS) for the intended architecture and its current validation limits.
