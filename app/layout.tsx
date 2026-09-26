@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'Resona Chat | Research Demo',
+  description: 'An exploratory chat interface for Resona OS research. No clinical or consequential decisions.',
 }
 
 export default function RootLayout({
