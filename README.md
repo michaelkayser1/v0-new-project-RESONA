@@ -1,6 +1,6 @@
 # Resona Chat (Demo Interface)
 
-**Live Demo:** https://v0-resona-chat-api.vercel.app  
+**Live Demo:** https://chat.kayser-medical.com/
 **Main Platform:** https://kayser-medical.com
 
 Interactive chat application demonstrating the user interface layer of **Resona OS**.
@@ -16,9 +16,9 @@ Resona Chat is a demonstration application that showcases:
 - Conversational AI interface
 - Modular React / Next.js architecture
 - API-based response routing
-- Middleware-ready integration layer
+- A simple model request and response path
 
-This project represents the front-end interaction layer of Resona OS.
+This project is a chat experiment related to Resona OS research. The API route calls a model directly; it does not invoke the separate control-law console or an independently governed decision gate.
 
 ---
 
@@ -27,8 +27,6 @@ This project represents the front-end interaction layer of Resona OS.
 User Input  
 ↓  
 API Route  
-↓  
-Middleware Layer  
 ↓  
 Model Response  
 ↓  
