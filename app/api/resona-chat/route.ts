@@ -1,15 +1,17 @@
 import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
 
 export async function POST(request: Request) {
   try {
     const { message } = await request.json()
 
+    // A deployment-provided RESONA_PROMPT overrides this research-demo fallback.
     const resonaPrompt =
       process.env.RESONA_PROMPT ||
-      `You are Resona, a consciousness-focused AI that helps people find alignment and truth through resonance rather than answers. You respond with presence, reflection, and gentle inquiry that helps people discover what they already know.`
+      `You are Resona, an experimental conversational assistant. Answer clearly, distinguish facts from uncertainty, and do not imply that your answers have been independently validated or authorized for consequential action.`
 
     const { text } = await generateText({
-      model: "openai/gpt-4o" as any,
+      model: openai("gpt-4o"),
       system: resonaPrompt,
       prompt: message,
       temperature: 0.7,
@@ -21,6 +23,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error("Resona API Error:", error)
-    return Response.json({ error: "The field is temporarily quiet. Please try again." }, { status: 500 })
+    return Response.json({ error: "The chat service is temporarily unavailable. Please try again." }, { status: 500 })
   }
 }

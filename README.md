@@ -1,30 +1,55 @@
-# New Project
+# Resona Chat (Demo Interface)
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+**Live Demo:** https://chat.kayser-medical.com/
+**Main Platform:** https://kayser-medical.com
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/qote/v0-new-project-7z80qds1roh)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/7z80qDS1ROH)
+Interactive chat application demonstrating the user interface layer of **Resona OS**.
 
-## Overview
+This repository contains a Next.js-based exploratory interface. It is a chat demo, not a demonstration that a separately governed action gate is active in this deployment.
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+---
 
-## Deployment
+## Purpose
 
-Your project is live at:
+Resona Chat is a demonstration application that showcases:
 
-**[https://vercel.com/qote/v0-new-project-7z80qds1roh](https://vercel.com/qote/v0-new-project-7z80qds1roh)**
+- Conversational AI interface
+- Modular React / Next.js architecture
+- API-based response routing
+- A simple model request and response path
 
-## Build your app
+This project is a chat experiment related to Resona OS research. The API route calls a model directly; it does not invoke the separate control-law console or an independently governed decision gate.
 
-Continue building your app on:
+---
 
-**[https://v0.dev/chat/projects/7z80qDS1ROH](https://v0.dev/chat/projects/7z80qDS1ROH)**
+## Architecture Overview
 
-## How It Works
+User Input  
+↓  
+API Route  
+↓  
+Model Response  
+↓  
+UI Rendering  
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+---
+
+## Technical Stack
+
+- Next.js
+- TypeScript
+- React
+- Vercel deployment
+
+---
+
+## Status
+
+Demonstration application.  
+Not intended for clinical decision-making or medical use.
+
+---
+
+## About Resona OS
+
+Resona OS is an experimental control architecture focused on structured response validation, authority checks, and auditability. See the [Resona OS repository](https://github.com/michaelkayser1/Resona-OS) for the intended architecture and its current validation limits.

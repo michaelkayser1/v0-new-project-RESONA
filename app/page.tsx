@@ -1,30 +1,11 @@
-"use client"
+import ResonaChat from "@/components/resona-chat"
 
-import { Nav } from "@/components/nav"
-import { Footer } from "@/components/footer"
-import { HeroSection } from "@/components/sections/hero"
-import { ProblemSection } from "@/components/sections/problem"
-import { PlatformSection } from "@/components/sections/platform"
-import { AudienceSection } from "@/components/sections/audience"
-import { ScienceSection } from "@/components/sections/science"
-import { FounderSection } from "@/components/sections/founder"
-import { ContactSection } from "@/components/sections/contact-form"
-
-// Resona OS v2 — includes Resona API, Docs, and Request Access pages
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
-      <Nav />
-      <main>
-        <HeroSection />
-        <ProblemSection />
-        <PlatformSection />
-        <AudienceSection />
-        <ScienceSection />
-        <FounderSection />
-        <ContactSection />
-      </main>
-      <Footer />
-    </div>
+    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <div className="container mx-auto py-12">
+        <ResonaChat />
+      </div>
+    </main>
   )
 }
