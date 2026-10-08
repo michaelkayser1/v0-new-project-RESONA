@@ -1,11 +1,31 @@
-import ResonaChat from "@/components/resona-chat"
+import ResearchHeader from "@/components/research-header"
+import ResearchHero from "@/components/research-hero"
+import ResearchFramework from "@/components/research-framework"
+import QOTEPrinciples from "@/components/qote-principles"
+import ArchiveSection from "@/components/archive-section"
+import ResearchTimeline from "@/components/research-timeline"
+import ResonaSection from "@/components/resona-section"
+import WhatsNew from "@/components/whats-new"
+import ResearchDisclosure from "@/components/research-disclosure"
+import SupportSectionUpdated from "@/components/support-section-updated"
+import ResearchFooter from "@/components/research-footer"
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto py-12">
-        <ResonaChat />
-      </div>
-    </main>
+    <div className="min-h-screen bg-background text-foreground">
+      <ResearchHeader />
+      <main>
+        <ResearchHero />
+        <ResearchFramework />
+        <QOTEPrinciples />
+        <ArchiveSection />
+        <ResearchTimeline />
+        <ResonaSection />
+        <WhatsNew />
+        <SupportSectionUpdated />
+        <ResearchDisclosure />
+      </main>
+      <ResearchFooter />
+    </div>
   )
 }
