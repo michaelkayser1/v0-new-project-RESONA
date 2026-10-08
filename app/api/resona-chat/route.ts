@@ -196,6 +196,11 @@ User message: "${sanitizedMessage}"`
     }
   }
 
+  if (!process.env.OPENAI_API_KEY) {
+    console.error("Resona AI error: OPENAI_API_KEY is not configured")
+    return errorResponse("Resona is not configured to reach its language model. Please try again later.", 503, false)
+  }
+
   let responseText: string
   try {
     const result = await generateText({
