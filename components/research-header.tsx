@@ -12,6 +12,8 @@ export default function ResearchHeader() {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/research", label: "Research" },
+    { href: "/science-and-governance", label: "Science & Rules" },
+    { href: "https://www.kayser-medical.com/", label: "Kayser Medical" },
     {
       label: "Archive",
       dropdown: [
