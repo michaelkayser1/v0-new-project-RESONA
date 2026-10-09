@@ -53,6 +53,11 @@ correctly. Durable storage and independent authority were not demonstrated.
   Resona-OS scopes, attribution rules, correction instructions, and capability limits.
   The configured `gpt-4o` request is not independent verification of provider routing.
 - User message Unicode is retained.
+- The visible QOTE overview and `/api/about-qote` share a factual description.
+  Unsupported soul/neutrino/energy-field claims and claims to detect personal
+  oscillation are removed from this overview. Experimental research, chat
+  heuristics, and Resona-OS governance are distinguished. Historical archive
+  pages and other site descriptions are outside this focused patch.
 
 ## Verification and limits
 
