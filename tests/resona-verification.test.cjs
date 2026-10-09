@@ -155,3 +155,16 @@ test('archive supports combined search and category without exposing account-men
   for (const url of ['https://accounts.google.com/', 'https://example.com/notebook/abc', 'javascript:alert(1)', 'https://notebooklm.google.com/notebook/abc?token=secret', 'https://user:pass@notebooklm.google.com/notebook/abc']) assert.equal(publicNotebookResource(url), null)
   assert.equal(publicNotebookResource('https://notebooklm.google.com/notebook/abc-123').category, 'Notebook')
 })
+
+test('all owner-supplied notebook links are distinct, safe and searchable', () => {
+  const { sharedNotebooks, allPublicResources, publicNotebookResource, filterResources } = require('../lib/public-resources.ts')
+  assert.equal(sharedNotebooks.length, 28)
+  assert.equal(new Set(sharedNotebooks.map(item => item.href)).size, 28)
+  assert.equal(sharedNotebooks[0].href, 'https://notebooklm.link.google/DVE6I3WWersL')
+  assert.equal(sharedNotebooks[27].href, 'https://notebooklm.link.google/Eg4CQjOWS28b')
+  for (const item of sharedNotebooks) assert.equal(publicNotebookResource(item.href).category, 'Notebook')
+  for (const url of ['https://notebooklm.link.google.evil.com/DVE6I3WWersL', 'https://notebooklm.link.google/DVE6I3WWersL?token=secret', 'http://notebooklm.link.google/DVE6I3WWersL', 'https://notebooklm.link.google/notebook/abc']) assert.equal(publicNotebookResource(url), null)
+  assert.equal(filterResources(allPublicResources(), '', 'Notebook').length, 28)
+  assert.equal(filterResources(allPublicResources(), 'notebook 28', 'Notebook')[0].id, 'notebook-28')
+  assert.equal(allPublicResources(sharedNotebooks[0].href).length, allPublicResources().length)
+})
