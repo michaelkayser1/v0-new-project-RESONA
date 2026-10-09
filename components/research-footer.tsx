@@ -15,7 +15,7 @@ export default function ResearchFooter() {
               <span className="font-medium text-foreground">Kayser Medical</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              The Kayser Autoethnographic Project: AI-Augmented Theoretical Physics Development (2017-Present)
+              The Kayser Autoethnographic Project: research, AI governance, writing, and music.
             </p>
           </div>
 
@@ -85,6 +85,10 @@ export default function ResearchFooter() {
                   Ko-fi Support
                 </a>
               </li>
+              <li><a href="https://suno.com/@michaelkayser155" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm text-muted-foreground hover:text-foreground">Suno Music</a>
+              </li>
+              <li><a href="https://michaelkayser.substack.com" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm text-muted-foreground hover:text-foreground">Substack Writing</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -94,7 +98,7 @@ export default function ResearchFooter() {
             &copy; {new Date().getFullYear()} Kayser Medical PLLC. All rights reserved.
           </p>
           <p className="font-mono text-xs text-muted-foreground">
-            Cite: Kayser, M.A. (2025). Kayser Autoethnographic Project (v1.0)
+            Cite individual works at their original sources.
           </p>
         </div>
       </div>

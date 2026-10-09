@@ -24,12 +24,5 @@
         }
       ]
     }
-  ],
-  "redirects": [
-    {
-      "source": "/resona",
-      "destination": "/chat",
-      "permanent": true
-    }
   ]
 }

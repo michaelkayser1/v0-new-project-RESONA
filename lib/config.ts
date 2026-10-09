@@ -7,7 +7,7 @@ export const siteConfig = {
   qote: {
     name: "QOTE",
     fullName: "Quantum Oscillator Theory of Everything",
-    description: "Reality emerges from oscillation, coherence, and resonance.",
+    description: "Experimental research exploring oscillator models, adaptation, and history dependence.",
   },
   contact: {
     email: "mike@kayser-medical.com",

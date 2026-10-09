@@ -1,7 +1,7 @@
 {
   "name": "Kayser Autoethnographic Project",
   "short_name": "Kayser Research",
-  "description": "AI-Augmented Theoretical Physics Development: An 8-Year Self-Study documenting QOTE and Resona OS development through systematic AI collaboration.",
+  "description": "Michael Kayser\u2019s research, writing, music, and conversational AI projects.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#070b12",
@@ -21,6 +21,10 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["education", "research", "science"],
+  "categories": [
+    "education",
+    "research",
+    "science"
+  ],
   "lang": "en-US"
 }

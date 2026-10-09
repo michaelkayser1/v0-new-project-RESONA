@@ -50,8 +50,10 @@ export default function ResearchHeader() {
               item.dropdown ? (
                 <div key={index} className="relative">
                   <button
+                    aria-label="Archive"
                     onClick={() => setArchiveDropdownOpen(!archiveDropdownOpen)}
-                    onBlur={() => setTimeout(() => setArchiveDropdownOpen(false), 150)}
+                    aria-expanded={archiveDropdownOpen}
+                    onKeyDown={event => { if (event.key === "Escape") setArchiveDropdownOpen(false) }}
                     className="flex items-center gap-1 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted/50"
                   >
                     {item.label}
@@ -105,7 +107,8 @@ export default function ResearchHeader() {
                 item.dropdown ? (
                   <div key={index}>
                     <button
-                      onClick={() => setArchiveDropdownOpen(!archiveDropdownOpen)}
+                      aria-label="Archive"
+                    onClick={() => setArchiveDropdownOpen(!archiveDropdownOpen)}
                       className="w-full flex items-center justify-between px-3 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md min-h-[44px]"
                     >
                       {item.label}
