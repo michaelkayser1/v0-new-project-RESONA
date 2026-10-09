@@ -8,54 +8,19 @@ const sourceSerif = Source_Serif_4({ subsets: ["latin"], variable: "--font-sourc
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" })
 
 export const metadata: Metadata = {
-  title: "The Kayser Autoethnographic Project | AI-Augmented Theoretical Physics Research",
-  description:
-    "An 8-year longitudinal self-study documenting AI-augmented theoretical physics development. Researcher: Dr. Michael A. Kayser, DO, FACMG. Focus: QOTE (Quantum Oscillator Theory of Everything) and Resona OS.",
-  keywords:
-    "autoethnographic AI research, QOTE quantum oscillator theory, AI-augmented cognition, human-AI collaboration methodology, Dr. Michael Kayser, longitudinal research, consciousness research, Resona OS",
-  authors: [{ name: "Dr. Michael A. Kayser, DO, FACMG", url: "https://kayser-medical.com" }],
-  creator: "Dr. Michael A. Kayser",
+  metadataBase: new URL("https://chat.kayser-medical.com"),
+  title: "The Kayser Autoethnographic Project | Research & Creative Work",
+  description: "Michael A. Kayser’s writing, music, experimental QOTE research, Resona chat, and separate Resona-OS governance work.",
+  authors: [{ name: "Michael A. Kayser, DO, FACMG" }],
+  creator: "Michael A. Kayser",
   publisher: "Kayser Medical PLLC",
-  openGraph: {
-    title: "The Kayser Autoethnographic Project",
-    description:
-      "AI-Augmented Theoretical Physics Development: An 8-Year Self-Study. Documenting the development of QOTE and Resona OS through systematic AI collaboration.",
-    url: "https://kayser-medical.com",
-    siteName: "Kayser Autoethnographic Project",
-    type: "website",
-    images: [
-      {
-        url: "/research-archive-quantum-oscillator-theory.jpg",
-        width: 1200,
-        height: 630,
-        alt: "The Kayser Autoethnographic Project - AI Research Archive",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "The Kayser Autoethnographic Project",
-    description: "AI-Augmented Theoretical Physics Development: An 8-Year Self-Study",
-    images: ["/research-archive-quantum-physics.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-    generator: 'v0.app'
+  openGraph: { title: "The Kayser Autoethnographic Project", description: "Research, AI governance, writing, and music.", url: "https://chat.kayser-medical.com", type: "website" },
+  robots: { index: true, follow: true },
 }
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 }
 
 export default function RootLayout({

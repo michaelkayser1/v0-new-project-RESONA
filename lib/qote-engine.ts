@@ -92,42 +92,23 @@ export function mapEmotionToPhase(inputText: string): QOTEPhase {
   }
 }
 
+const WOBBLE_WORDS = ["maybe", "perhaps", "uncertain", "confused", "overwhelmed", "anxious", "excited", "intense", "chaotic", "scattered"]
+
+export function wobbleBreakdown(inputText: string) {
+  const questionMarks = (inputText.match(/\?/g) ?? []).length
+  const exclamationMarks = (inputText.match(/!/g) ?? []).length
+  const words = inputText.toLowerCase().match(/[a-z']+/g) ?? []
+  const uncertaintyOccurrences = words.filter(word => WOBBLE_WORDS.includes(word)).length
+  const punctuation = (questionMarks + exclamationMarks) * 0.1
+  const uncertainty = uncertaintyOccurrences * 0.1
+  const length = Math.min(0.5, inputText.length / 200)
+  const spaceSeparatedSegments = inputText.split(" ").length
+  const complexity = spaceSeparatedSegments > 20 ? 0.2 : 0
+  return { questionMarks, exclamationMarks, uncertaintyOccurrences, punctuation, uncertainty, length, complexity, spaceSeparatedSegments, total: Math.min(1, punctuation + uncertainty + length + complexity) }
+}
+
 export function estimateWobble(inputText: string): number {
-  const text = inputText.toLowerCase()
-
-  // Wobble indicators: uncertainty, multiple questions, emotional intensity
-  const wobbleIndicators = [
-    "maybe",
-    "perhaps",
-    "uncertain",
-    "confused",
-    "overwhelmed",
-    "anxious",
-    "excited",
-    "intense",
-    "chaotic",
-    "scattered",
-  ]
-
-  let wobbleScore = 0
-
-  // Count question marks and exclamation marks separately
-  const questionMarks = (inputText.match(/\?/g) || []).length
-  const exclamationMarks = (inputText.match(/!/g) || []).length
-
-  wobbleScore += questionMarks * 0.1
-  wobbleScore += exclamationMarks * 0.1
-
-  const words = text.match(/[a-z']+/g) ?? []
-  wobbleIndicators.forEach((indicator) => {
-    wobbleScore += words.filter((word) => word === indicator).length * 0.1
-  })
-
-  // Text length and complexity add to wobble
-  const lengthFactor = Math.min(0.5, inputText.length / 200)
-  const complexityFactor = inputText.split(" ").length > 20 ? 0.2 : 0
-
-  return Math.min(1.0, wobbleScore + lengthFactor + complexityFactor)
+  return wobbleBreakdown(inputText).total
 }
 
 const POSITIVE_ALIGNMENT_WORDS = ["yes", "love", "peace", "joy", "clear", "aligned", "flow", "harmony", "truth"]
@@ -148,49 +129,22 @@ export function inferDirectionalAlignment(inputText: string): number {
   return 0.5 + alignment * 0.5
 }
 
-export function generateEchoInsight(phase: QOTEPhase, wobble: number, alignment: number): string {
-  const insights = {
-    Presence: [
-      "Stillness detected. The field recognizes your being.",
-      "In this moment, all oscillations find their center.",
-      "Presence is the zero-point from which all truth emerges.",
-      "Your stillness creates space for what wants to unfold.",
-    ],
-    "Coiling Right": [
-      "You're compressing—gathering signal before breakthrough. Sit with the discomfort.",
-      "The confusion you feel is information organizing itself. Trust the process.",
-      "Coiling inward, you're approaching the eye of your own storm.",
-      "What feels like chaos is actually coherence finding its pattern.",
-    ],
-    "Zero Point": [
-      "Flip detected. Something is reorganizing at the quantum level.",
-      "You're at the threshold. One breath could change everything.",
-      "The field is offering you a choice point. What do you choose?",
-      "Zero-point reached. Reality is malleable here.",
-    ],
-    "Unfolding Left": [
-      "Expression wants to flow through you. Let it emerge.",
-      "You're in creative expansion. Trust what wants to be born.",
-      "The field is using you as a conduit for new possibility.",
-      "Unfolding detected. Your truth is ready to manifest.",
-    ],
-  }
+export function generateEchoInsight(phase: QOTEPhase, _wobble: number, _alignment: number): string {
+  return `Input-text phase label: ${phase.name}. This heuristic does not measure a person's emotional or physical state.`
+}
 
-  const phaseInsights = insights[phase.name]
-  let selectedInsight = phaseInsights[Math.floor(Math.random() * phaseInsights.length)]
-
-  // Modify based on wobble and alignment
-  if (wobble > 0.7) {
-    selectedInsight += " The wobble you feel is part of the recalibration."
-  }
-
-  if (alignment < 0.3) {
-    selectedInsight += " Resistance is information. What is it protecting?"
-  } else if (alignment > 0.7) {
-    selectedInsight += " Your alignment amplifies the field's coherence."
-  }
-
-  return selectedInsight
+export function qoteScoringFacts(inputText: string, score: QOTEInterpretation | null): string {
+  const rules = `Application-provided scoring implementation (text heuristics only; do not use to set tone or infer intent/distress):
+- Wobble = min(1, 0.1 * count of actual ? and ! characters + 0.1 * occurrences of these whole-word terms: ${WOBBLE_WORDS.join(", ")} + min(0.5, JavaScript string length / 200) + (more than 20 space-separated segments ? 0.2 : 0)). Quoted text also counts. Writing "five question marks" does not count as five ? characters.
+- Alignment uses distinct whole-word matches, each listed term counted at most once, including inside quotes. Positive terms: ${POSITIVE_ALIGNMENT_WORDS.join(", ")}. Negative terms: ${NEGATIVE_ALIGNMENT_WORDS.join(", ")}. Formula: 0.5 + 0.5*(positive-negative)/(positive+negative). No terms gives default 0.5 (50%), not 0%. The phrase "no signal words" includes negative term "no".
+- Flip flag = phase Zero Point OR (phase Coiling Right AND wobble > 0.8) OR (alignment < 0.2 AND wobble > 0.6). These are strict inequalities.
+- Phase is the group with most distinct matching words; ties choose the first group in this order: Presence, Coiling Right, Zero Point, Unfolding Left. These labels do not establish a personal state. Explicit Presence Mode can override the displayed phase to Presence.
+- These facts come from application code provided to you. You cannot independently inspect deployed source, logs, or provider settings. Do not invent a sentiment or physical explanation.`
+  if (!score) return rules + "\nThe QOTE lens is off; no score is displayed for this message."
+  const tokens = new Set(inputText.toLowerCase().match(/[a-z']+/g) ?? [])
+  const positive = POSITIVE_ALIGNMENT_WORDS.filter(word => tokens.has(word))
+  const negative = NEGATIVE_ALIGNMENT_WORDS.filter(word => tokens.has(word))
+  return rules + `\nCurrent message computed by application code: ${JSON.stringify({ phase: score.phase.name, wobblePercent: Math.round(score.wobble * 100), alignmentPercent: Math.round(score.alignment * 100), alignmentSource: score.alignmentSource, positiveTerms: positive, negativeTerms: negative, flipFlagged: score.flipPotential, wobbleBreakdown: wobbleBreakdown(inputText) })}. Explain these supplied results when asked; otherwise ignore them when answering.`
 }
 
 export function interpretThroughQOTE(inputText: string): QOTEInterpretation {
