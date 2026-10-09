@@ -10,6 +10,7 @@ export default function ResourcePage({ title, description, category, notice }: {
     <h1 className="mb-5 text-3xl font-light sm:text-4xl">{title}</h1>
     <p className="mb-8 max-w-3xl text-lg text-muted-foreground">{description}</p>
     {notice && <p className="mb-8 rounded-lg border border-border bg-card p-5 text-muted-foreground">{notice}</p>}
+    {category === "Music" && <p className="mb-6"><a href="/provenance/suno-catalog.json" download className="inline-flex min-h-11 items-center text-primary underline">Download music provenance catalog (JSON)</a></p>}
     <ArchiveExplorer resources={resources} category={category} />
   </main><ResearchFooter /></div>
 }

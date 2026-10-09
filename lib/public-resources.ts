@@ -1,3 +1,5 @@
+import sunoCatalog from "@/public/provenance/suno-catalog.json"
+
 export type ResourceCategory = "Writing" | "Software" | "Music" | "Chat" | "Transcripts" | "Papers" | "Metrics" | "Notebook"
 export interface PublicResource {
   id: string
@@ -6,6 +8,7 @@ export interface PublicResource {
   description: string
   href: string
   action: string
+  provenance?: { displayedDate: string; displayedModel: string; displayedPlayback: string; preview: boolean; observedOn: string; songId: string }
 }
 
 // Public destinations only. No inferred transcript, publication, or track inventories.
@@ -20,7 +23,7 @@ export const publicResources: PublicResource[] = [
 
 export function filterResources(resources: PublicResource[], query: string, category?: ResourceCategory) {
   const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean)
-  return resources.filter(resource => (!category || resource.category === category) && terms.every(term => `${resource.title} ${resource.description} ${resource.category}`.toLocaleLowerCase().includes(term)))
+  return resources.filter(resource => (!category || resource.category === category) && terms.every(term => `${resource.title} ${resource.description} ${resource.category} ${resource.provenance?.displayedModel ?? ""} ${resource.provenance?.displayedDate ?? ""}`.toLocaleLowerCase().includes(term)))
 }
 
 // A notebook is added only after the owner supplies its share URL. Never publish
@@ -71,6 +74,17 @@ export const sharedNotebooks: PublicResource[] = [
 
 export function allPublicResources(optionalNotebookUrl?: string): PublicResource[] {
   const extra = publicNotebookResource(optionalNotebookUrl)
-  const resources = [...publicResources, ...sharedNotebooks]
+  const resources = [...publicResources, ...sharedMusic, ...sharedNotebooks]
   return extra && !resources.some(resource => resource.href === extra.href) ? [...resources, extra] : resources
 }
+
+// Distinct song IDs preserve versions even when their titles match.
+export const sharedMusic: PublicResource[] = sunoCatalog.tracks.map(track => ({
+  id: `suno-${track.id}`,
+  title: track.title,
+  category: "Music",
+  description: "An AI-assisted music artifact by Michael Kayser, preserved as an individual version in the development archive.",
+  href: track.shareUrl,
+  action: "Listen on Suno",
+  provenance: { displayedDate: track.displayedDate, displayedModel: track.displayedModel, displayedPlayback: track.displayedPlayback, preview: track.preview, observedOn: sunoCatalog.observedOn, songId: track.id },
+}))

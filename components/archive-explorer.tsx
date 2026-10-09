@@ -31,6 +31,13 @@ export default function ArchiveExplorer({ resources, category }: { resources: Pu
           <p className="mb-2 text-xs uppercase tracking-wider text-primary">{resource.category}</p>
           <h2 className="mb-3 text-xl font-medium">{resource.title}</h2>
           <p className="mb-5 flex-1 text-muted-foreground">{resource.description}</p>
+          {resource.provenance && <dl className="mb-5 space-y-2 text-sm text-muted-foreground">
+            <div><dt className="font-medium text-foreground">Date shown by Suno</dt><dd>{resource.provenance.displayedDate}</dd></div>
+            <div><dt className="font-medium text-foreground">Model shown by Suno</dt><dd>{resource.provenance.displayedModel}</dd></div>
+            <div><dt className="font-medium text-foreground">Available playback</dt><dd>{resource.provenance.displayedPlayback}{resource.provenance.preview ? " · Preview" : ""}</dd></div>
+            <div><dt className="font-medium text-foreground">Metadata checked</dt><dd>{resource.provenance.observedOn}</dd></div>
+            <div><dt className="font-medium text-foreground">Song ID</dt><dd className="break-all font-mono text-xs">{resource.provenance.songId}</dd></div>
+          </dl>}
           <a href={resource.href} target={resource.href.startsWith("https:") ? "_blank" : undefined} rel={resource.href.startsWith("https:") ? "noopener noreferrer" : undefined} className="inline-flex min-h-11 items-center font-medium text-primary underline underline-offset-4">{resource.action}{resource.href.startsWith("https:") ? " ↗" : ""}</a>
         </article>)}
       </div>
