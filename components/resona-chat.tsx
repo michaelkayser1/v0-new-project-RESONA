@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ArrowLeft, ChevronDown, Info, Pencil, RotateCcw, Wind } from "lucide-react"
 import QOTEInfo from "./qote-info"
+import { completedChatHistory } from "@/lib/chat-history"
 import { formatCount, formatPercent, toUnitMetric } from "@/lib/metrics"
 
 type MetricSource = "calculated" | "default"
@@ -173,7 +174,7 @@ function MetricBadges({ data, infoId }: { data: QOTEData; infoId: string }) {
           Phase: {data.phase.name}
         </Badge>
         <Badge variant="outline" className={`${badgeBase} border-slate-300 text-slate-800`}>
-          Wobble: {wobble}
+          Input wobble: {wobble}
         </Badge>
         <Badge variant="outline" className={`${badgeBase} border-slate-300 text-slate-800`}>
           Alignment: {alignment}
@@ -189,7 +190,7 @@ function MetricBadges({ data, infoId }: { data: QOTEData; infoId: string }) {
           className="inline-flex min-h-11 items-center gap-1 rounded-md px-2 text-xs font-medium text-blue-800 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
         >
           <Info className="h-4 w-4" aria-hidden="true" />
-          Experimental scores
+          Input-text heuristics
         </button>
       </div>
       {open && (
@@ -204,8 +205,9 @@ function MetricBadges({ data, infoId }: { data: QOTEData; infoId: string }) {
           </p>
           <ul className="mt-2 flex flex-col gap-1">
             <li>
-              <span className="font-medium text-slate-900">Wobble:</span> rises with question marks, ellipses, hedge
-              words like {"\u201C"}maybe{"\u201D"} or {"\u201C"}but{"\u201D"}, and very short or long messages.
+              <span className="font-medium text-slate-900">Wobble:</span> adds 10% per question mark, exclamation mark, or listed uncertainty word,
+              up to 50% for length (reached at 100 characters), and 20% for more than 20 space-separated words.
+              The sum caps at 100%. Long technical questions can reach this cap without distress.
             </li>
             <li>
               <span className="font-medium text-slate-900">Alignment:</span> positive minus negative words, divided by
@@ -213,8 +215,8 @@ function MetricBadges({ data, infoId }: { data: QOTEData; infoId: string }) {
               not a measured value.
             </li>
             <li>
-              <span className="font-medium text-slate-900">Flip flagged:</span> Zero Point phase, or high wobble with
-              low alignment.
+              <span className="font-medium text-slate-900">Flip flagged:</span> Zero Point phase, Coiling Right with wobble above 80%, or alignment below 20%
+              with wobble above 60%. This is a text rule, not a physical event.
             </li>
           </ul>
         </div>
@@ -239,8 +241,8 @@ export default function ResonaChat() {
   const [message, setMessage] = useState("")
   const [conversation, setConversation] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [useQOTELens, setUseQOTELens] = useState(true)
-  const [useRTP, setUseRTP] = useState(true)
+  const [useQOTELens, setUseQOTELens] = useState(false)
+  const [useRTP, setUseRTP] = useState(false)
   const [presenceMode, setPresenceMode] = useState(false)
   const [resonanceStats, setResonanceStats] = useState<ResonanceStats | null>(null)
   const [breathingPattern, setBreathingPattern] = useState<RTPData["breathingPattern"] | null>(null)
@@ -272,7 +274,7 @@ export default function ResonaChat() {
       const response = await fetch("/api/resona-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage, useQOTELens, useRTP: rtpOn, presenceMode }),
+        body: JSON.stringify({ message: userMessage, history: completedChatHistory(conversation), useQOTELens, useRTP: rtpOn, presenceMode }),
       })
 
       const data = await response.json().catch(() => null)
@@ -356,7 +358,7 @@ export default function ResonaChat() {
         </Button>
         <div className="text-right">
           <h1 className="text-lg font-semibold tracking-wide text-slate-900 md:text-2xl">Resona</h1>
-          <p className="text-xs text-slate-600">Conversational companion · experimental</p>
+          <p className="text-xs text-slate-600">Conversational AI · experimental</p>
         </div>
       </header>
 
@@ -374,7 +376,7 @@ export default function ResonaChat() {
             title="QOTE lens"
             checked={useQOTELens}
             onCheckedChange={setUseQOTELens}
-            description="Off: standard conversation. On: each message gets experimental keyword scores (phase, wobble, alignment) that set Resona's tone and appear as badges."
+            description="Off: standard conversation. On: each message gets experimental keyword scores (phase, wobble, alignment) displayed as badges for input text only. Scores do not control replies or assess your state."
           />
           <ModeToggle
             id={`${baseId}-rtp`}
@@ -384,7 +386,7 @@ export default function ResonaChat() {
             disabled={!useQOTELens}
             description={
               useQOTELens
-                ? "On: distress phrases such as \u201Coverwhelmed\u201D, \u201Cstuck\u201D, or \u201Calone\u201D switch Resona to a gentler reflective reply with suggested prompts and a breathing pattern. Off: no protocol."
+                ? "On: a direct request such as \u201CPlease help me calm down\u201D offers optional reflection and breathing. Scores and quoted keywords do not trigger it. Off: no protocol."
                 : "Needs the QOTE lens. Turn the lens on to use RTP."
             }
           />
@@ -397,6 +399,11 @@ export default function ResonaChat() {
           />
         </div>
       </details>
+
+      <p className="text-xs leading-relaxed text-slate-600">
+        Replies use up to 10 completed exchanges in this open chat. Reloading clears the conversation.
+        This is conversation context, not durable memory or verified authorization.
+      </p>
 
       <QOTEInfo expanded={false} />
 
@@ -505,13 +512,13 @@ export default function ResonaChat() {
               <div className="flex w-full max-w-[88%] flex-col gap-2 rounded-lg border border-orange-200 bg-orange-50 p-3 text-orange-950">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Badge className={`${badgeBase} ${TRIGGER_STYLES[msg.rtpData.trigger.type] ?? "bg-slate-200 text-slate-900"}`}>
-                    RTP: {msg.rtpData.trigger.type.replace(/_/g, " ")}
+                    Optional reflection: requested
                   </Badge>
                   <Badge variant="outline" className={`${badgeBase} border-orange-300 text-orange-950`}>
-                    {msg.rtpData.trigger.severity}
+                    User requested
                   </Badge>
                 </div>
-                <p className="text-xs text-orange-900">Triggered by keywords in your message (experimental).</p>
+                <p className="text-xs text-orange-900">Offered because you explicitly requested support. No severity assessment.</p>
                 {msg.rtpData.breathingPattern && (
                   <Button
                     size="sm"
