@@ -24,6 +24,8 @@ export default function ResearchFooter() {
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-foreground">Research</p>
             <ul className="flex flex-col">
               <li>
+                <Link href="/science-and-governance" className="inline-flex min-h-11 items-center break-all text-sm text-muted-foreground hover:text-foreground">Science & Rules</Link>
+              </li><li>
                 <Link href="/research" className="inline-flex min-h-11 items-center break-all text-sm text-muted-foreground hover:text-foreground">
                   Methodology
                 </Link>
