@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '..')
 // Test the real route with a stubbed provider; no billable/model calls or secrets.
 require.extensions['.ts'] = (module, filename) => {
   const output = ts.transpileModule(fs.readFileSync(filename, 'utf8'), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText
   module._compile(output, filename)
 }
@@ -167,4 +167,24 @@ test('all owner-supplied notebook links are distinct, safe and searchable', () =
   assert.equal(filterResources(allPublicResources(), '', 'Notebook').length, 28)
   assert.equal(filterResources(allPublicResources(), 'notebook 28', 'Notebook')[0].id, 'notebook-28')
   assert.equal(allPublicResources(sharedNotebooks[0].href).length, allPublicResources().length)
+})
+
+test('music archive preserves distinct versions and observed provenance without inferred prompts', () => {
+  const { sharedMusic, allPublicResources, filterResources } = require('../lib/public-resources.ts')
+  const catalog = require('../public/provenance/suno-catalog.json')
+  assert.equal(catalog.submittedLinks, 36)
+  assert.equal(sharedMusic.length, 35)
+  assert.equal(new Set(sharedMusic.map(item => item.id)).size, 35)
+  assert.equal(new Set(sharedMusic.map(item => item.href)).size, 35)
+  assert.equal(filterResources(allPublicResources(), '', 'Music').length, 36)
+  assert.equal(filterResources(sharedMusic, 'Upside Down Radio').length, 2)
+  assert.equal(filterResources(sharedMusic, 'V3.5 Upside Down')[0].provenance.displayedPlayback, '3:34')
+  assert.equal(sharedMusic.at(-1).provenance.displayedModel, 'V6-MINI')
+  for (const item of sharedMusic) {
+    assert.match(item.href, /^https:\/\/suno\.com\/s\/[A-Za-z0-9]{16}$/)
+    assert.match(item.provenance.songId, /^[a-f0-9-]{36}$/)
+    assert.equal(item.provenance.observedOn, '2026-10-09')
+    assert.ok(item.provenance.displayedDate)
+    assert.equal('prompt' in item.provenance, false)
+  }
 })
