@@ -18,6 +18,7 @@ export default function ResearchHeader() {
       label: "Archive",
       dropdown: [
         { href: "/archive", label: "Overview" },
+        { href: "/apps", label: "App Studio" },
         { href: "/archive/notebooks", label: "Shared Notebooks" },
         { href: "/archive/transcripts", label: "Chat Transcripts" },
         { href: "/archive/artifacts", label: "Generated Artifacts" },

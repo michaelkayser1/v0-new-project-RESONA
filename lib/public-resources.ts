@@ -13,6 +13,7 @@ export interface PublicResource {
 
 // Public destinations only. No inferred transcript, publication, or track inventories.
 export const publicResources: PublicResource[] = [
+  { id: "vercel-app-studio", title: "The v0 app studio", category: "Software", description: "Search Michael Kayser’s 672-project development collection: prototypes, consoles, models, and creative tools. Access and build status are labeled individually.", href: "/apps", action: "Explore apps" },
   { id: "chat", title: "Resona conversational chat", category: "Chat", description: "Ask questions and inspect optional input-text heuristics. Conversation context lasts only while this page stays open.", href: "/chat", action: "Open chat" },
   { id: "governance", title: "Resona-OS governance repository", category: "Software", description: "Source and documentation for the separate AI governance workstream. Consult the repository for its current verification status and limitations.", href: "https://github.com/michaelkayser1/Resona-OS", action: "Open repository" },
   { id: "site-source", title: "Resona website source", category: "Software", description: "The source code, changes, and tests for this website and conversational chat.", href: "https://github.com/michaelkayser1/v0-new-project-RESONA", action: "Open source" },
