@@ -17,7 +17,7 @@ const cards = [
   {title:"Oscillations and mathematical models", status:"Mathematically defined / computational", detail:"Driven and damped oscillators and Kuramoto-type phase dynamics allow explicit stability, synchrony, and boundedness tests. Computational coherence is not physical or clinical validation."},
   {title:"Symmetry and the early universe", status:"Established principles, open cosmology", detail:"Symmetry breaking is a well-developed theoretical and experimental concept. The origin of the matter–antimatter asymmetry, dark matter, and dark energy remain unresolved scientific questions."},
   {title:"QOTE, rotating leptons and dark-sector hypotheses", status:"Exploratory / unverified", detail:"Electron–positron–neutrino structural concepts, force-unification proposals, and the dark-sector oscillation interpretation are hypotheses. They are not confirmed explanations for fundamental forces or cosmological observations."},
-  {title:"CUST gating and Resona", status:"Experimental implementation", detail:"The Kuramoto order parameter R measures phase coherence, not truth, consent, or authority. Source Audit 001 reports that the cited CUST reference implementation does not implement the proposed output gate and identifies a cross-batch attention bug. Treat claimed performance improvements as unverified."},
+  {title:"CUST gating and Resona", status:"Experimental implementation", detail:"The Kuramoto order parameter R measures phase coherence, not truth, consent, or authority. CUST gate behavior, attention isolation, and claimed performance improvements remain OPEN pending a separately documented technical review. Source Audit 001 does not establish these technical findings."},
   {title:"Evidence and authorization", status:"Governance proposal", detail:"Observe → Speak → Adjudicate → Actuate. Evidence may inform a human decision, but models, coherence scores, and simulations cannot authorize their own consequential actions. The chat demo does not establish independent action-gate enforcement."}
 ]
 export default function ScienceAndGovernance() {
@@ -54,9 +54,9 @@ export default function ScienceAndGovernance() {
         </div>
       </section>
       <section aria-labelledby="audit" style={{marginTop:45}}>
-        <h2 id="audit" style={{fontSize:26}}>Source Audit 001 — open corrections</h2>
-        <p style={{color:"#c8d4e2",lineHeight:1.75}}>The October 9, 2026 audit identifies a double-counted or cancelled time derivative in the QOTE2 field equation (depending on metric signature), unsupported GW/CMB/collider agreement claims, illustrative rather than derived force modes, a CUST abstract claiming unmeasured hallucination reductions, a missing reference gate, batch-contaminated attention, and uncontrolled toy comparisons. These are recorded audit findings, not independently reproduced verification here. Prior results must not be marketed as scientific proof.</p>
-        <p style={{color:"#c8d4e2"}}>A separate earlier QOTE coupling of symmetric and antisymmetric tensors also contracts to zero as written. Corrected theories require new explicit mathematics and testable predictions.</p>
+        <h2 id="audit" style={{fontSize:26}}>Source Audit 001 — scope and pending technical review</h2>
+        <p style={{color:"#c8d4e2",lineHeight:1.75}}>Source Audit 001, dated October 9, 2026, is a review-draft source and deployment-metadata audit. It records repository and production-source mappings, earlier audit-chain withdrawals, the unlocated Witness Ledger suite, and unresolved public-surface reconciliation. It did not re-run application tests or conduct an independent scientific review.</p>
+        <p style={{color:"#c8d4e2"}}>Correction — October 10, 2026: this page previously attributed QOTE2 equation, observational-agreement, force-mode, and CUST implementation/performance findings to Source Audit 001. The linked audit does not document those findings. Their use as verified evidence is BLOCKED until a separate technical record supplies exact source locations, analysis methods, and reproducible evidence. The underlying hypotheses remain OPEN. A successful deployment is not scientific validation.</p>
       </section>
       <section aria-labelledby="reg" style={{marginTop:45}}>
         <h2 id="reg" style={{fontSize:26}}>Regulatory agencies, standards & present status</h2>
