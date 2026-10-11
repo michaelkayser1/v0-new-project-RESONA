@@ -1,8 +1,8 @@
 "use client"
 import { useMemo, useState } from "react"
-import catalog from "@/public/provenance/vercel-apps.json"
+export type AppCatalog = { observedOn: string; apps: { id: string; name: string; title: string; category: string; url: string | null; accessRestricted: boolean; buildState: string; updatedOn: string }[] }
 
-export default function AppsExplorer() {
+export default function AppsExplorer({ catalog }: { catalog: AppCatalog }) {
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState("All")
   const [access, setAccess] = useState("All")
@@ -12,7 +12,7 @@ export default function AppsExplorer() {
     (category === "All" || app.category === category) &&
     (access === "All" || (access === "Public links" ? !app.accessRestricted && !!app.url : app.accessRestricted)) &&
     query.trim().toLowerCase().split(/\s+/).every(term => (app.title + " " + app.name + " " + app.category).toLowerCase().includes(term))
-  ), [query, category, access])
+  ), [catalog, query, category, access])
   return <div className="apps-explorer">
     <style>{`
       .apps-explorer { color:#f5f4ef; font-family:system-ui,sans-serif }
@@ -36,7 +36,7 @@ export default function AppsExplorer() {
     <p role="status" aria-live="polite" style={{color:"#c8d4e2",marginBottom:20}}>Showing {Math.min(limit,filtered.length)} of {filtered.length} apps · inventory checked {catalog.observedOn}</p>
     <div className="apps-grid">{filtered.slice(0,limit).map(app=><article className="apps-card" key={app.id}>
       <span className="apps-tag">{app.category}</span><h2>{app.title}</h2>
-      <p>{app.name}</p><p>Built with v0 AI · Michael Kayser’s development collection</p>
+      <p>{app.name}</p><p>Inventory ID: {app.id} · lifecycle review pending</p><p>Built with v0 AI · Michael Kayser’s development collection</p>
       <p>{app.buildState === "READY" ? "Latest recorded build completed" : "Latest recorded build: " + app.buildState} · {app.accessRestricted ? "Access controlled" : app.url ? "Production link" : "No production link recorded"}</p>
       <p>Updated {app.updatedOn}. {app.accessRestricted ? "Opening this app may require an authorized Vercel account." : "Availability and behavior may change."}</p>
       {app.url ? <a href={app.url} target="_blank" rel="noopener noreferrer">{app.accessRestricted ? "Open app — access may be required ↗" : "Explore app ↗"}</a> : <p>Link pending</p>}
@@ -45,3 +45,4 @@ export default function AppsExplorer() {
     {filtered.length>limit && <button className="apps-load" type="button" onClick={()=>setLimit(n=>n+24)}>Show 24 more apps</button>}
   </div>
 }
+

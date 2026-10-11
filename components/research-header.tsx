@@ -12,6 +12,7 @@ export default function ResearchHeader() {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/research", label: "Research" },
+    { href: "/project-registry", label: "Registry" },
     { href: "/science-and-governance", label: "Science & Rules" },
     { href: "https://www.kayser-medical.com/", label: "Kayser Medical" },
     {
@@ -49,7 +50,7 @@ export default function ResearchHeader() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1">
             {navItems.map((item, index) =>
               item.dropdown ? (
                 <div key={index} className="relative">
@@ -95,7 +96,7 @@ export default function ResearchHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden min-h-[44px] min-w-[44px]"
+            className="xl:hidden min-h-[44px] min-w-[44px]"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
@@ -105,7 +106,7 @@ export default function ResearchHeader() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-border">
+          <nav className="xl:hidden py-4 border-t border-border">
             <div className="flex flex-col gap-1">
               {navItems.map((item, index) =>
                 item.dropdown ? (
@@ -153,3 +154,4 @@ export default function ResearchHeader() {
     </header>
   )
 }
+

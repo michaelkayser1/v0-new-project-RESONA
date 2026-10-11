@@ -25,6 +25,7 @@ export default function ResearchFooter() {
             <ul className="flex flex-col">
               <li>
                 <Link href="/science-and-governance" className="inline-flex min-h-11 items-center break-all text-sm text-muted-foreground hover:text-foreground">Science & Rules</Link>
+              </li><li><Link href="/project-registry" className="inline-flex min-h-11 items-center text-sm text-muted-foreground hover:text-foreground">Project registry</Link>
               </li><li>
                 <Link href="/research" className="inline-flex min-h-11 items-center break-all text-sm text-muted-foreground hover:text-foreground">
                   Methodology
@@ -107,3 +108,4 @@ export default function ResearchFooter() {
     </footer>
   )
 }
+
