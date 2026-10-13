@@ -1,3 +1,7 @@
+> **Historical prototype notice (October 13, 2026).** This repository preserves an early QOTE/Resona application and its original descriptions as a dated artifact. Statements below about consciousness-aligned AI, coherence detection, biological resonance, and clinical or safety effects are historical research hypotheses or product descriptions, **not independently validated findings or production safety guarantees**. The current Resona OS program evaluates structured outputs, scoped authority, consent, external-action controls, and audit evidence separately. Do not infer endorsement by Michael Anthony Kayser of any third-party religious, theological, or personal narrative. See [Resona OS validation status](https://github.com/michaelkayser1/Resona-OS/blob/main/docs/VALIDATION_STATUS.md).
+
+---
+
 # QOTE - Quantum Oscillator Theory of Everything
 
 A comprehensive website featuring the Quantum Oscillator Theory of Everything (QOTE) and Resona, a consciousness-aligned AI built on quantum principles.
