@@ -14,9 +14,10 @@ require.extensions['.ts'] = (module, filename) => {
 }
 const originalLoad = Module._load
 let lastCall
+let providerOutcome = 'ok'
 Module._load = function (id, parent, isMain) {
-  if (id === 'ai') return { generateText: async opts => { lastCall = opts; return { text: 'Stub response; no live model evaluation.' } } }
-  if (id === '@ai-sdk/openai') return { openai: model => ({ configuredModel: model }) }
+  if (id === 'ai') return { generateText: async opts => { lastCall = opts; if (providerOutcome === 'error') throw new Error('Synthetic provider outage'); if (providerOutcome === 'timeout') throw new DOMException('Synthetic timeout', 'TimeoutError'); return { text: providerOutcome === 'empty' ? ' ' : 'Stub response; no live model evaluation.' } } }
+  if (id === '@ai-sdk/openai') return { openai: { responses: model => ({ configuredModel: model, api: 'responses' }) } }
   if (id.startsWith('@/')) id = path.join(root, id.slice(2))
   return originalLoad.call(this, id, parent, isMain)
 }
@@ -88,9 +89,58 @@ test('route forwards history, defaults to standard mode and supplies identity fo
   assert.deepEqual(lastCall.messages.slice(0,2),history)
   assert.equal(lastCall.messages[2].content,calibration)
   assert.match(lastCall.system,/OpenAI/)
-  assert.match(lastCall.system,/gpt-4o/)
+  assert.match(lastCall.system,/gpt-6\.1-sol/)
   assert.match(lastCall.system,/distinct from Resona-OS/)
   assert.match(lastCall.system,/Preserve explicit corrections/)
+})
+
+test('migration uses Responses with supported reasoning options and stateless requests', async () => {
+  const response = await post({message:'What is 2+2?'})
+  assert.equal(response.status, 200)
+  assert.equal((await response.json()).model, 'gpt-6.1-sol')
+  assert.deepEqual(lastCall.model, {configuredModel:'gpt-6.1-sol',api:'responses'})
+  assert.equal('temperature' in lastCall, false)
+  assert.deepEqual(lastCall.providerOptions.openai, {reasoningEffort:'low',reasoningSummary:null,textVerbosity:'low',store:false,serviceTier:'default'})
+  assert.equal(lastCall.maxOutputTokens, 2048)
+  assert.equal(lastCall.maxRetries, 0)
+  assert.ok(lastCall.abortSignal instanceof AbortSignal)
+})
+
+test('all six modes keep the response contract across the model migration', async () => {
+  for (const [body, mode] of [
+    [{message:'What is 2+2?'},'standard'],
+    [{message:'Hello'},'greeting'],
+    [{message:'Who are you?'},'identity'],
+    [{message:'Explain this example.',presenceMode:true},'presence'],
+    [{message:'Explain this example.',useQOTELens:true},'qote'],
+    [{message:'Please help me calm down.',useQOTELens:true,useRTP:true},'rtp'],
+  ]) {
+    const response = await post(body)
+    assert.equal(response.status, 200)
+    const result = await response.json()
+    assert.equal(result.mode, mode)
+    assert.equal(result.source, 'ai')
+    assert.equal(result.model, 'gpt-6.1-sol')
+    assert.equal(result.context.durable, false)
+  }
+})
+
+test('provider outage, timeout and empty text remain retryable failures; missing key is explicit', async () => {
+  try {
+    for (const outcome of ['error','timeout','empty']) {
+      providerOutcome = outcome
+      const response = await post({message:'Hello'})
+      assert.equal(response.status, 502)
+      const result = await response.json()
+      assert.equal(result.retryable, true)
+      assert.equal(result.response, undefined)
+    }
+    delete process.env.OPENAI_API_KEY
+    assert.equal((await post({message:'Hello'})).status, 503)
+  } finally {
+    providerOutcome = 'ok'
+    process.env.OPENAI_API_KEY = 'test-stub-not-a-credential'
+  }
 })
 test('opt-in calibration provides scoring facts without inferring distress or activating RTP', async () => {
   const response = await post({message:calibration,useQOTELens:true,useRTP:true})

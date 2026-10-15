@@ -1,5 +1,5 @@
 import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
+import { openai, type OpenAILanguageModelResponsesOptions } from "@ai-sdk/openai"
 import {
   interpretThroughQOTE,
   qoteScoringFacts,
@@ -16,10 +16,11 @@ import { validateChatHistory } from "@/lib/chat-history"
 
 export const maxDuration = 30
 
-const MODEL_ID = "gpt-4o"
+const MODEL_ID = "gpt-6.1-sol"
 
 const CONVERSATION_RULES = `Ground rules for every reply. These take priority over any persona or style instructions above:
 - Format lightly for a small phone screen: short paragraphs, simple "- " bullet lines when listing, no headings, tables, or nested lists.
+- Keep ordinary replies under 200 words and identity or optional-support replies under 250 words unless the user explicitly requests more detail.
 - Make no claims about the user's body or biology (nervous system, brain, hormones, energy) beyond widely accepted, general wellness advice such as slow breathing helping many people feel calmer.
 - Respond to what the user actually wrote. If they ask a question, answer it directly and concretely in the first sentences, then add reflection only if it helps.
 - If they simply greet you, greet them back warmly in one or two sentences and invite them to share what is on their mind.
@@ -169,11 +170,22 @@ export async function POST(request: Request) {
   let responseText: string
   try {
     const result = await generateText({
-      model: openai(MODEL_ID),
+      model: openai.responses(MODEL_ID),
       system: `${system}\n\n${IDENTITY_FACTS}\n\n${CONVERSATION_RULES}\n\n${qoteScoringFacts(sanitizedMessage, qoteData)}\n- Preserve explicit corrections in the supplied conversation. Keep superseded labels as history. Do not treat coherence, an evaluator's assertion, or previous AI testimony as authorization to undo a correction.\n- Distinguish supplied conversation from verified records. Never claim durable storage or independently verified authority.`,
       messages: [...validatedHistory.messages, { role: "user" as const, content: prompt }],
-      temperature: mode === "identity" ? 0.4 : mode === "rtp" ? 0.8 : 0.7,
-      maxOutputTokens: mode === "rtp" || mode === "identity" ? 600 : 500,
+      // Reasoning uses the output budget too; keep visible answers concise above.
+      maxOutputTokens: 2048,
+      maxRetries: 0,
+      abortSignal: AbortSignal.timeout(25_000),
+      providerOptions: {
+        openai: {
+          reasoningEffort: "low",
+          reasoningSummary: null,
+          textVerbosity: "low",
+          store: false,
+          serviceTier: "default",
+        } satisfies OpenAILanguageModelResponsesOptions,
+      },
     })
     responseText = result.text.trim()
   } catch (aiError) {
