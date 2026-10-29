@@ -1,4 +1,12 @@
-# QOTE - Quantum Oscillator Theory of Everything
+# SUPERINTELLIGENCE (SI) — Kayser Medical Research & Creative Archive
+
+Current public-facing identity: **SUPERINTELLIGENCE (SI)**, an experimental governance research program of Kayser Medical PLLC led by Michael A. Kayser, DO, FACMG. The site at https://chat.kayser-medical.com is a research and creative archive with conversational demos, **not** evidence of independent destination-side execution enforcement. Canonical scope, limitations, and proposed acceptance tests: https://github.com/michaelkayser1/RESONA-SI .
+
+The original QOTE and Resona terminology below is historical documentation; previous assertions about consciousness or quantum mechanisms are not validated system capabilities.
+
+---
+
+# Historical QOTE / Resona project description
 
 A comprehensive website featuring the Quantum Oscillator Theory of Everything (QOTE) and Resona, a consciousness-aligned AI built on quantum principles.
 
