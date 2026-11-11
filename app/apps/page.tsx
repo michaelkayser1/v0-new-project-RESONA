@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import RecoveredAppsUpdate from "@/components/recovered-apps-update"
 import AppsExplorer, { type AppCatalog } from "@/components/apps-explorer"
 export const metadata: Metadata = { title:"App Studio | Kayser Medical + Resona", description:"Michael Kayser’s searchable collection of v0-built apps, prototypes, consoles, and interactive experiments." }
 export default async function AppStudio() {
@@ -23,6 +24,7 @@ export default async function AppStudio() {
         <p style={{maxWidth:780,fontSize:19,lineHeight:1.7,color:"#c8d4e2"}}>Apps built by Michael Kayser with v0 AI—from governance consoles and oscillator experiments to creative tools and clinical concepts. Explore the work alongside the music and NotebookLM conversations.</p>
         <p style={{maxWidth:850,color:"#c8d4e2",lineHeight:1.7}}>These are prototypes and historical development artifacts. A completed build records deployment, not scientific validation, clinical readiness, or independent safety enforcement. Older apps may retain earlier claims; consult the <a style={{color:"#edce8c"}} href="/science-and-governance">current science and governance reference</a>. Project names organize the collection; they do not verify the app’s capabilities.</p>
       </header>
+      <RecoveredAppsUpdate />
       {catalog ? <AppsExplorer catalog={catalog} /> : <p role="status">The canonical app inventory could not be loaded. <a href="https://www.kayser-medical.com/apps" style={{color:"#edce8c"}}>Open the Kayser Medical studio →</a></p>}
       <footer style={{marginTop:48,paddingTop:24,borderTop:"1px solid #34445b",color:"#c8d4e2",lineHeight:1.7}}>Built with v0 AI. Curated by Michael A. Kayser. Access settings remain with each app. This directory does not invite submission of patient information or other sensitive records.</footer>
     </div>
