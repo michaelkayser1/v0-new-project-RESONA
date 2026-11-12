@@ -12,6 +12,7 @@ export default function ResearchHeader() {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/research", label: "Research" },
+    { href: "/research#resona-si", label: "RESONA-SI" },
     { href: "/project-registry", label: "Registry" },
     { href: "/science-and-governance", label: "Science & Rules" },
     { href: "https://www.kayser-medical.com/", label: "Kayser Medical" },
