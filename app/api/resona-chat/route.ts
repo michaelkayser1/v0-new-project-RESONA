@@ -198,14 +198,10 @@ export async function POST(request: Request) {
   }
 
   if (qoteData) {
+    // Record only non-identifying heuristic metrics; never persist prompt or reply text.
     ResonanceLogger.log({
-      timestamp: new Date().toISOString(),
-      userPhase: qoteData.phase,
-      resonaPhase: qoteData.phase,
       alignmentScore: qoteData.alignmentSource === "calculated" ? qoteData.alignment : null,
       flipPotential: qoteData.flipPotential,
-      inputText: sanitizedMessage,
-      outputText: responseText,
     })
   }
 
