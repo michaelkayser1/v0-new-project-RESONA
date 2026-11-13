@@ -9,12 +9,12 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jet
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://chat.kayser-medical.com"),
-  title: "SUPERINTELLIGENCE (SI) | Kayser Medical Research & Creative Archive",
-  description: "Kayser Medical SUPERINTELLIGENCE (SI) research, historical model experiments, chat, writing and music. Independent authorization and verified execution remain research objectives.",
+  title: "Resona | Experimental Chat, Research & Writing",
+  description: "Explore experimental Resona conversation, evidence-centered AI governance research, Michael Kayser's writing, music, and creative archives. Not a clinical service or validated authorization system.",
   authors: [{ name: "Michael A. Kayser, DO, FACMG" }],
   creator: "Michael A. Kayser",
   publisher: "Kayser Medical PLLC",
-  openGraph: { title: "SUPERINTELLIGENCE (SI) | Kayser Medical", description: "Independent destination-side authorization research, writing and creative archives.", url: "https://chat.kayser-medical.com", type: "website" },
+  openGraph: { title: "Resona | Kayser Medical Research & Creative Archive", description: "Experimental AI conversation, governance research, personal writing, and creative archives.", url: "https://chat.kayser-medical.com", type: "website" },
   robots: { index: true, follow: true },
 }
 
