@@ -238,3 +238,20 @@ test('music archive preserves distinct versions and observed provenance without 
     assert.equal('prompt' in item.provenance, false)
   }
 })
+
+
+test('opt-in telemetry retains only non-identifying metrics and never raw input or reply', async () => {
+  const { ResonanceLogger } = require('../lib/qote-engine.ts')
+  const sentinel = 'FAKE-PRIVATE-SENTINEL-DO-NOT-STORE-92714'
+  const response = await post({message:sentinel,useQOTELens:true})
+  assert.equal(response.status, 200)
+  const payload = await response.json()
+  assert.equal(payload.source, 'ai')
+  assert.ok(payload.qoteData)
+  assert.ok(payload.resonanceStats.totalInteractions > 0)
+  const logs = ResonanceLogger.getRecentLogs(100)
+  assert.ok(logs.length > 0)
+  assert.ok(logs.every(entry =>
+    Object.keys(entry).every(key => ['alignmentScore','flipPotential'].includes(key))))
+  assert.doesNotMatch(JSON.stringify(logs), /FAKE-PRIVATE-SENTINEL|Stub response|inputText|outputText|timestamp|userPhase|resonaPhase/)
+})

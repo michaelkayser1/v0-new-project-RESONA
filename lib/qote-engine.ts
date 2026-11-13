@@ -24,14 +24,10 @@ export interface QOTEInterpretation {
   resonanceScore: number
 }
 
+// Ephemeral aggregate inputs only. No message, response, identifier or timestamp.
 export interface ResonanceLogEntry {
-  timestamp: string
-  userPhase: QOTEPhase
-  resonaPhase: QOTEPhase
   alignmentScore: number | null
   flipPotential: boolean
-  inputText: string
-  outputText: string
 }
 
 // Whole-word matching so "no" does not match "know" and "how" does not match "show".
@@ -201,7 +197,7 @@ export function detectIdentityQuestion(inputText: string): boolean {
   return text.length <= 160 && IDENTITY_PATTERNS.some((pattern) => pattern.test(text))
 }
 
-// Resonance Logging
+// Server-instance-only rolling metrics; never retain user or model text.
 export class ResonanceLogger {
   private static logs: ResonanceLogEntry[] = []
 

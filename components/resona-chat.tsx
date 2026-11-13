@@ -401,8 +401,10 @@ export default function ResonaChat() {
       </details>
 
       <p className="text-xs leading-relaxed text-slate-600">
+        Experimental conversational prototype, not a medical service, diagnosis, or validated authorization system.
+        Please do not enter patient identifiers, confidential records, or other sensitive information.
         Replies use up to 10 completed exchanges in this open chat. Reloading clears the conversation.
-        This is conversation context, not durable memory or verified authorization.
+        Conversation context is not durable memory or verified authorization.
       </p>
 
       <QOTEInfo expanded={false} />
